@@ -10,6 +10,16 @@ import { Transform } from 'class-transformer';
 import {capitalCase} from 'change-case';
 
 /**
+ * Combined decorator for UUID 
+ */
+export function UUID() {
+  return applyDecorators(
+    IsAlpha(),
+    MaxLength(40)
+  );
+}
+
+/**
  * Combined decorator for Alpha ( string with min|max lengths ).
  * Converts string to lowercase with first letter caps.
  */
