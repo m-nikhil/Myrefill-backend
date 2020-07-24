@@ -6,7 +6,6 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
 
   /**
    * Swagger configuations
@@ -34,5 +33,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  await app.listen(3000);
 }
 bootstrap();
