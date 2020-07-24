@@ -7,6 +7,7 @@ import {
 } from 'class-validator';
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
+import {capitalCase} from 'change-case';
 
 /**
  * Combined decorator for Alpha ( string with min|max lengths ).
@@ -18,7 +19,7 @@ export function Word() {
     MinLength(3),
     MaxLength(15),
     Transform(
-      (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(),
+      (str: string) => capitalCase(str),
     ),
   );
 }
