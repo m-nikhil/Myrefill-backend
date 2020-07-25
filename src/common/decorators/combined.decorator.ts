@@ -7,15 +7,19 @@ import {
 } from 'class-validator';
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import {capitalCase} from 'change-case';
+import { capitalCase } from 'change-case';
 
 /**
- * Combined decorator for UUID 
+ * Combined decorator for UUID
  */
 export function UUID() {
   return applyDecorators(
-    IsAlpha(),
-    MaxLength(40)
+    Matches(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+      {
+        message: 'invalid uuid',
+      },
+    ),
   );
 }
 
@@ -28,9 +32,7 @@ export function Word() {
     IsAlpha(),
     MinLength(3),
     MaxLength(15),
-    Transform(
-      (str: string) => capitalCase(str),
-    ),
+    Transform((str: string) => capitalCase(str)),
   );
 }
 
