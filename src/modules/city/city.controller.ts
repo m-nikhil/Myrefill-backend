@@ -5,8 +5,7 @@ import {
   Get,
   Put,
   Param,
-  Delete,
-  Query,
+  Delete
 } from '@nestjs/common';
 import { CityResponse } from './dto/response/cityResponse.dto';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
@@ -48,9 +47,20 @@ export class CityController {
    * query all city
    */
   @Get()
-  async query(@Query('deleted') deleted: boolean): Promise<CityResponse[]> {
+  async query(): Promise<CityResponse[]> {
     const userResponseList = CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.query, deleted),
+      await atomic(this.connection, this.cityService.query),
+    );
+    return userResponseList;
+  }
+
+  /**
+   * query all city including deleted
+   */
+  @Get('all')
+  async queryAll(): Promise<CityResponse[]> {
+    const userResponseList = CityResponse.fromEntityList(
+      await atomic(this.connection, this.cityService.queryAll),
     );
     return userResponseList;
   }

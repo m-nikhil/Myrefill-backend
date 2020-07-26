@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { QueryRunner } from 'typeorm';
+import { QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { City } from 'src/entities/city.entity';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
@@ -91,15 +91,34 @@ export class CityService {
     return id;
   }
 
-  /**
-   * query city table
-   */
-  async query(transactionRunner: QueryRunner, deleted): Promise<City[]> {
-    const query = transactionRunner.manager
+  static queryCity(transactionRunner: QueryRunner): SelectQueryBuilder<City> {
+    return transactionRunner.manager
       .createQueryBuilder()
       .select()
       .from(City, 'city');
-    if (deleted) query.withDeleted();
-    return query.execute();
+  }
+
+  /**
+   * query city table
+   */
+  async query(transactionRunner: QueryRunner): Promise<City[]> {
+    const query = CityService.queryCity(transactionRunner);
+    const result: City[] = await query.execute();
+    if (result.length == 0) {
+      throw new EntityNotFoundError(City, null);
+    }
+    return result;
+  }
+
+  /**
+   * query city table including soft deleted
+   */
+  async queryAll(transactionRunner: QueryRunner): Promise<City[]> {
+    const query = CityService.queryCity(transactionRunner);
+    const result: City[] = await query.withDeleted().execute();
+    if (result.length == 0) {
+      throw new EntityNotFoundError(City, null);
+    }
+    return result;
   }
 }
