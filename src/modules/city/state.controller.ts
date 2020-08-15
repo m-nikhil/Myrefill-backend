@@ -37,7 +37,7 @@ export class StateController {
   async create(
     @Body() createStateRequest: CreateStateRequest,
   ): Promise<StateResponse> {
-   return StateResponse.fromEntity(
+    return StateResponse.fromEntity(
       await atomic(
         this.connection,
         this.stateService.create,
