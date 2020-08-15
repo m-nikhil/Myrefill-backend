@@ -37,10 +37,9 @@ export class CityController {
   async create(
     @Body() createCityRequest: CreateCityRequest,
   ): Promise<CityResponse> {
-    const userDto = CityResponse.fromEntity(
+    return CityResponse.fromEntity(
       await atomic(this.connection, this.cityService.create, createCityRequest),
     );
-    return userDto;
   }
 
   /**
@@ -48,10 +47,9 @@ export class CityController {
    */
   @Get()
   async query(): Promise<CityResponse[]> {
-    const userResponseList = CityResponse.fromEntityList(
+    return CityResponse.fromEntityList(
       await atomic(this.connection, this.cityService.query),
     );
-    return userResponseList;
   }
 
   /**
@@ -59,10 +57,9 @@ export class CityController {
    */
   @Get('all')
   async queryAll(): Promise<CityResponse[]> {
-    const userResponseList = CityResponse.fromEntityList(
+    return CityResponse.fromEntityList(
       await atomic(this.connection, this.cityService.queryAll),
     );
-    return userResponseList;
   }
 
   /**
@@ -70,10 +67,9 @@ export class CityController {
    */
   @Get(':id')
   async find(@Param() params: IdParam): Promise<CityResponse> {
-    const userDto = CityResponse.fromEntity(
+    return CityResponse.fromEntity(
       await atomic(this.connection, this.cityService.getById, params.id),
     );
-    return userDto;
   }
 
   /**
@@ -84,7 +80,7 @@ export class CityController {
     @Param() params: IdParam,
     @Body() updateCityRequest: UpdateCityRequest,
   ): Promise<CityResponse> {
-    const userDto = CityResponse.fromEntity(
+    return CityResponse.fromEntity(
       await atomic(
         this.connection,
         this.cityService.update,
@@ -92,7 +88,6 @@ export class CityController {
         updateCityRequest,
       ),
     );
-    return userDto;
   }
 
   /**
