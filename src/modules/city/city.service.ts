@@ -1,5 +1,5 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { QueryRunner } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { City } from 'src/entities/city.entity';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
@@ -23,9 +23,7 @@ export class CityService {
       .lastUpdatedBy('curr_user')
       .build();
 
-    return transactionRunner.manager.save(city).catch(() => {
-      throw new BadRequestException('City already exist');
-    });
+    return transactionRunner.manager.save(city);
   }
 
   /**
@@ -49,10 +47,7 @@ export class CityService {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(City)
-      .set(updateCityRequest)
-      .set({
-        lastUpdatedBy: 'curr_user',
-      })
+      .set({ name: updateCityRequest.name, lastUpdatedBy: 'curr_user' })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
       .execute();
@@ -91,15 +86,34 @@ export class CityService {
     return id;
   }
 
-  /**
-   * query city table
-   */
-  async query(transactionRunner: QueryRunner, deleted): Promise<City[]> {
-    const query = transactionRunner.manager
+  static queryCity(transactionRunner: QueryRunner): SelectQueryBuilder<City> {
+    return transactionRunner.manager
       .createQueryBuilder()
       .select()
       .from(City, 'city');
-    if (deleted) query.withDeleted();
-    return query.execute();
+  }
+
+  /**
+   * query city table
+   */
+  async query(transactionRunner: QueryRunner): Promise<City[]> {
+    const query = CityService.queryCity(transactionRunner);
+    const result: City[] = await query.execute();
+    if (result.length == 0) {
+      throw new EntityNotFoundError(City, null);
+    }
+    return result;
+  }
+
+  /**
+   * query city table including soft deleted
+   */
+  async queryAll(transactionRunner: QueryRunner): Promise<City[]> {
+    const query = CityService.queryCity(transactionRunner);
+    const result: City[] = await query.withDeleted().execute();
+    if (result.length == 0) {
+      throw new EntityNotFoundError(City, null);
+    }
+    return result;
   }
 }
