@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CityModule } from './modules/city/city.module';
+import { LocationModule } from './modules/city/location.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), CityModule],
+  imports: [TypeOrmModule.forRoot(), LocationModule],
 })
 export class AppModule {}
