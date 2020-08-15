@@ -8,7 +8,6 @@ module.exports = [
     "password": "mysecretpassword",
     "database": "myrefill",
     "entities": ["dist/**/*.entity.js"],
-    "synchronize": true,
     "migrations": [
         "dist/migrations/**/*.js"
       ],
