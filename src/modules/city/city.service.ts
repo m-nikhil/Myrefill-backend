@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { City } from 'src/entities/city.entity';
@@ -23,9 +23,7 @@ export class CityService {
       .lastUpdatedBy('curr_user')
       .build();
 
-    return transactionRunner.manager.save(city).catch(() => {
-      throw new BadRequestException('City already exist');
-    });
+    return transactionRunner.manager.save(city);
   }
 
   /**
@@ -49,10 +47,7 @@ export class CityService {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(City)
-      .set(updateCityRequest)
-      .set({
-        lastUpdatedBy: 'curr_user',
-      })
+      .set({ name: updateCityRequest.name, lastUpdatedBy: 'curr_user' })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
       .execute();

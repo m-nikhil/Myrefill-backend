@@ -3,6 +3,7 @@ import { EntityNotFoundExceptionFilter } from './common/exceptions/entityNotFoun
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { QueryFailedErrorExceptionFilter } from './common/exceptions/postgresQueryFailedError.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +23,7 @@ async function bootstrap() {
    *  Filter configurations
    */
   app.useGlobalFilters(new EntityNotFoundExceptionFilter());
+  app.useGlobalFilters(new QueryFailedErrorExceptionFilter());
 
   /**
    *  Pipes configurations

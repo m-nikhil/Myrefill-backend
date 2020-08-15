@@ -5,7 +5,7 @@ import {
   Get,
   Put,
   Param,
-  Delete
+  Delete,
 } from '@nestjs/common';
 import { CityResponse } from './dto/response/cityResponse.dto';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
