@@ -4,9 +4,10 @@ import { Builder } from 'builder-pattern';
 
 export class CityResponse {
   static fromEntity(city: City) {
-    return Builder(City)
+    return Builder(CityResponse)
       .id(city.id)
       .name(city.name)
+      .stateId(city.stateId)
       .build();
   }
 
@@ -23,4 +24,7 @@ export class CityResponse {
 
   @Word()
   readonly name: string;
+
+  @UUID()
+  readonly stateId: string;
 }

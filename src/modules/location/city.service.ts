@@ -18,12 +18,11 @@ export class CityService {
     transactionRunner: QueryRunner,
     createCityRequest: CreateCityRequest,
   ): Promise<City> {
-    const city = Builder(City)
-      .name(createCityRequest.name)
+    const city: City = Builder(createCityRequest as City)
       .lastUpdatedBy('curr_user')
       .build();
 
-    return transactionRunner.manager.save(city);
+    return transactionRunner.manager.save(City, city);
   }
 
   /**
@@ -47,7 +46,8 @@ export class CityService {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(City)
-      .set({ name: updateCityRequest.name, lastUpdatedBy: 'curr_user' })
+      .set(updateCityRequest)
+      .set({ lastUpdatedBy: 'curr_user' })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
       .execute();
@@ -97,8 +97,9 @@ export class CityService {
    * query city table
    */
   async query(transactionRunner: QueryRunner): Promise<City[]> {
-    const query = CityService.queryCity(transactionRunner);
-    const result: City[] = await query.execute();
+    const result: City[] = await CityService.queryCity(
+      transactionRunner,
+    ).execute();
     if (result.length == 0) {
       throw new EntityNotFoundError(City, null);
     }
@@ -109,8 +110,9 @@ export class CityService {
    * query city table including soft deleted
    */
   async queryAll(transactionRunner: QueryRunner): Promise<City[]> {
-    const query = CityService.queryCity(transactionRunner);
-    const result: City[] = await query.withDeleted().execute();
+    const result: City[] = await CityService.queryCity(transactionRunner)
+      .withDeleted()
+      .execute();
     if (result.length == 0) {
       throw new EntityNotFoundError(City, null);
     }

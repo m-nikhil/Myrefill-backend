@@ -6,19 +6,29 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   Index,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { State } from './state.entity';
 
 /**
  * Represents City
  */
 @Entity()
+@Index(['name', 'stateId'], { unique: true })
 export class City {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Index({ unique: true })
   @Column()
   name: string;
+
+  @Column({ type: 'uuid', nullable: true })
+  stateId: string;
+
+  @ManyToOne(() => State)
+  @JoinColumn({ name: 'stateId' })
+  state: State;
 
   @Column()
   lastUpdatedBy: string;
