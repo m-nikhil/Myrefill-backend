@@ -4,7 +4,7 @@ import { State } from 'src/entities/state.entity';
 
 export class StateResponse {
   static fromEntity(state: State) {
-    return Builder(State)
+    return Builder(StateResponse)
       .id(state.id)
       .name(state.name)
       .build();

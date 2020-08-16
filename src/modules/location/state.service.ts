@@ -18,12 +18,11 @@ export class StateService {
     transactionRunner: QueryRunner,
     createStateRequest: CreateStateRequest,
   ): Promise<State> {
-    const state = Builder(State)
-      .name(createStateRequest.name)
+    const state: State = Builder(createStateRequest as State)
       .lastUpdatedBy('curr_user')
       .build();
 
-    return transactionRunner.manager.save(state);
+    return transactionRunner.manager.save(State, state);
   }
 
   /**
@@ -101,8 +100,9 @@ export class StateService {
    * query state table
    */
   async query(transactionRunner: QueryRunner): Promise<State[]> {
-    const query = StateService.queryState(transactionRunner);
-    const result: State[] = await query.execute();
+    const result: State[] = await StateService.queryState(
+      transactionRunner,
+    ).execute();
     if (result.length == 0) {
       throw new EntityNotFoundError(State, null);
     }
@@ -113,8 +113,9 @@ export class StateService {
    * query state table including soft deleted
    */
   async queryAll(transactionRunner: QueryRunner): Promise<State[]> {
-    const query = StateService.queryState(transactionRunner);
-    const result: State[] = await query.withDeleted().execute();
+    const result: State[] = await StateService.queryState(transactionRunner)
+      .withDeleted()
+      .execute();
     if (result.length == 0) {
       throw new EntityNotFoundError(State, null);
     }
