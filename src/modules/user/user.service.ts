@@ -32,6 +32,17 @@ export class UserService {
   }
 
   /**
+   * get user by email
+   * Don't throw error. Null value is needed by the auth flow.
+   */
+  async getByEmail(
+    transactionRunner: QueryRunner,
+    email: string,
+  ): Promise<User> {
+    return transactionRunner.manager.findOne(User, { email: email });
+  }
+
+  /**
    * delete user by id, if deletedAt is null,
    * else throw `EntityNotFoundError`.
    *
