@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle('MyrefillServer')
     .setDescription('Myrefill Server API description')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
