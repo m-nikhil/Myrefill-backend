@@ -16,10 +16,11 @@ export class StateService {
    */
   async create(
     transactionRunner: QueryRunner,
+    userId: string,
     createStateRequest: CreateStateRequest,
   ): Promise<State> {
     const state: State = Builder(createStateRequest as State)
-      .lastUpdatedBy('curr_user')
+      .lastUpdatedBy(userId)
       .build();
 
     return transactionRunner.manager.save(State, state);
@@ -40,6 +41,7 @@ export class StateService {
    */
   async update(
     transactionRunner: QueryRunner,
+    userId: string,
     id: string,
     updateStateRequest: UpdateStateRequest,
   ): Promise<State> {
@@ -49,7 +51,7 @@ export class StateService {
       .set(updateStateRequest)
       .set({
         name: updateStateRequest.name,
-        lastUpdatedBy: 'curr_user',
+        lastUpdatedBy: userId,
       })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
@@ -69,12 +71,16 @@ export class StateService {
    *
    * Update lastUpdatedBy column
    */
-  async delete(transactionRunner: QueryRunner, id: string): Promise<string> {
+  async delete(
+    transactionRunner: QueryRunner,
+    userId: string,
+    id: string,
+  ): Promise<string> {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(State)
       .set({
-        lastUpdatedBy: 'curr_user',
+        lastUpdatedBy: userId,
       })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')

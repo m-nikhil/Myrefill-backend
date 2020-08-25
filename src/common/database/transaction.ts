@@ -17,8 +17,7 @@ export async function atomic(
   } catch (error) {
     await queryRunner.rollbackTransaction();
     throw error;
-  }
-  finally {
+  } finally {
     await queryRunner.release();
   }
 

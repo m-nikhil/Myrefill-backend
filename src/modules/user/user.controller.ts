@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import {
+  Request,
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+} from '@nestjs/common';
 
 import { atomic } from 'src/common/database/transaction';
 import { Connection } from 'typeorm';
@@ -8,6 +16,7 @@ import { IdParam } from 'src/common/param/id.param';
 import { CreateUserRequest } from './dto/request/createUserRequest.dto';
 import { UserResponse } from './dto/response/userResponse.dto';
 import { UserService } from './user.service';
+import { JWT } from 'src/common/decorators/jwt.decorator';
 
 @Controller('user')
 @ApiTags('user')
@@ -16,6 +25,7 @@ import { UserService } from './user.service';
   type: ErrorResponse,
   description: 'Entity not found.',
 })
+@JWT()
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -27,10 +37,16 @@ export class UserController {
    */
   @Post()
   async create(
+    @Request() req,
     @Body() createUserRequest: CreateUserRequest,
   ): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(this.connection, this.userService.create, createUserRequest),
+      await atomic(
+        this.connection,
+        this.userService.create,
+        req.user.userId,
+        createUserRequest,
+      ),
     );
   }
 
@@ -68,7 +84,12 @@ export class UserController {
    * delete a user by id
    */
   @Delete(':id')
-  async delete(@Param() params: IdParam): Promise<string> {
-    return atomic(this.connection, this.userService.delete, params.id);
+  async delete(@Request() req, @Param() params: IdParam): Promise<string> {
+    return atomic(
+      this.connection,
+      this.userService.delete,
+      req.user.userId,
+      params.id,
+    );
   }
 }

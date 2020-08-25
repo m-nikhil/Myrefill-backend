@@ -16,10 +16,11 @@ export class CityService {
    */
   async create(
     transactionRunner: QueryRunner,
+    userId: string,
     createCityRequest: CreateCityRequest,
   ): Promise<City> {
     const city: City = Builder(createCityRequest as City)
-      .lastUpdatedBy('curr_user')
+      .lastUpdatedBy(userId)
       .build();
 
     return transactionRunner.manager.save(City, city);
@@ -40,6 +41,7 @@ export class CityService {
    */
   async update(
     transactionRunner: QueryRunner,
+    userId: string,
     id: string,
     updateCityRequest: UpdateCityRequest,
   ): Promise<City> {
@@ -47,7 +49,7 @@ export class CityService {
       .createQueryBuilder()
       .update(City)
       .set(updateCityRequest)
-      .set({ lastUpdatedBy: 'curr_user' })
+      .set({ lastUpdatedBy: userId })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
       .execute();
@@ -66,12 +68,16 @@ export class CityService {
    *
    * Update lastUpdatedBy column
    */
-  async delete(transactionRunner: QueryRunner, id: string): Promise<string> {
+  async delete(
+    transactionRunner: QueryRunner,
+    userId: string,
+    id: string,
+  ): Promise<string> {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(City)
       .set({
-        lastUpdatedBy: 'curr_user',
+        lastUpdatedBy: userId,
       })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')

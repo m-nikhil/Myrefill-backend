@@ -1,4 +1,5 @@
 import {
+  Request,
   Controller,
   Post,
   Body,
@@ -16,6 +17,7 @@ import { StateService } from './state.service';
 import { CreateStateRequest } from './dto/request/createStateRequest.dto';
 import { StateResponse } from './dto/response/stateResponse.dto';
 import { UpdateStateRequest } from './dto/request/updateStateRequest.dto';
+import { JWT } from 'src/common/decorators/jwt.decorator';
 
 @Controller('state')
 @ApiTags('state')
@@ -34,13 +36,16 @@ export class StateController {
    * create a new state
    */
   @Post()
+  @JWT()
   async create(
+    @Request() req,
     @Body() createStateRequest: CreateStateRequest,
   ): Promise<StateResponse> {
     return StateResponse.fromEntity(
       await atomic(
         this.connection,
         this.stateService.create,
+        req.user.userId,
         createStateRequest,
       ),
     );
@@ -80,7 +85,9 @@ export class StateController {
    * update a state by id
    */
   @Put(':id')
+  @JWT()
   async update(
+    @Request() req,
     @Param() params: IdParam,
     @Body() updateStateRequest: UpdateStateRequest,
   ): Promise<StateResponse> {
@@ -88,6 +95,7 @@ export class StateController {
       await atomic(
         this.connection,
         this.stateService.update,
+        req.user.userId,
         params.id,
         updateStateRequest,
       ),
@@ -98,7 +106,13 @@ export class StateController {
    * delete a state by id
    */
   @Delete(':id')
-  async delete(@Param() params: IdParam): Promise<string> {
-    return atomic(this.connection, this.stateService.delete, params.id);
+  @JWT()
+  async delete(@Request() req, @Param() params: IdParam): Promise<string> {
+    return atomic(
+      this.connection,
+      this.stateService.delete,
+      req.user.userId,
+      params.id,
+    );
   }
 }

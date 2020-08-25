@@ -1,4 +1,5 @@
 import {
+  Request,
   Controller,
   Post,
   Body,
@@ -16,6 +17,7 @@ import { UpdateCityRequest } from './dto/request/updateCityRequest.dto';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ErrorResponse } from 'src/common/dto/error.dto';
 import { IdParam } from 'src/common/param/id.param';
+import { JWT } from 'src/common/decorators/jwt.decorator';
 
 @Controller('city')
 @ApiTags('city')
@@ -34,11 +36,18 @@ export class CityController {
    * create a new city
    */
   @Post()
+  @JWT()
   async create(
+    @Request() req,
     @Body() createCityRequest: CreateCityRequest,
   ): Promise<CityResponse> {
     return CityResponse.fromEntity(
-      await atomic(this.connection, this.cityService.create, createCityRequest),
+      await atomic(
+        this.connection,
+        this.cityService.create,
+        req.user.userId,
+        createCityRequest,
+      ),
     );
   }
 
@@ -76,7 +85,9 @@ export class CityController {
    * update a city by id
    */
   @Put(':id')
+  @JWT()
   async update(
+    @Request() req,
     @Param() params: IdParam,
     @Body() updateCityRequest: UpdateCityRequest,
   ): Promise<CityResponse> {
@@ -84,6 +95,7 @@ export class CityController {
       await atomic(
         this.connection,
         this.cityService.update,
+        req.user.userId,
         params.id,
         updateCityRequest,
       ),
@@ -94,7 +106,13 @@ export class CityController {
    * delete a city by id
    */
   @Delete(':id')
-  async delete(@Param() params: IdParam): Promise<string> {
-    return atomic(this.connection, this.cityService.delete, params.id);
+  @JWT()
+  async delete(@Request() req, @Param() params: IdParam): Promise<string> {
+    return atomic(
+      this.connection,
+      this.cityService.delete,
+      req.user.userId,
+      params.id,
+    );
   }
 }

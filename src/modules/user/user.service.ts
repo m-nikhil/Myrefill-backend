@@ -15,10 +15,11 @@ export class UserService {
    */
   async create(
     transactionRunner: QueryRunner,
+    userId: string,
     createUserRequest: CreateUserRequest,
   ): Promise<User> {
     const user: User = Builder((createUserRequest as unknown) as User)
-      .lastUpdatedBy('curr_user')
+      .lastUpdatedBy(userId)
       .build();
 
     return transactionRunner.manager.save(User, user);
@@ -51,14 +52,18 @@ export class UserService {
    *
    * Update lastUpdatedBy column
    */
-  async delete(transactionRunner: QueryRunner, id: string): Promise<string> {
+  async delete(
+    transactionRunner: QueryRunner,
+    userId: string,
+    id: string,
+  ): Promise<string> {
     const updateResult = await transactionRunner.manager
       .createQueryBuilder()
       .update(User)
       .set({
         fullname: id,
         email: id,
-        lastUpdatedBy: 'curr_user',
+        lastUpdatedBy: userId,
       })
       .where('id = :id', { id: id })
       .andWhere('deletedAt is null')
