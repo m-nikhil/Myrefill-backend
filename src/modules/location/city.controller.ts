@@ -6,6 +6,7 @@ import {
   Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CityResponse } from './dto/response/cityResponse.dto';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
@@ -16,6 +17,7 @@ import { UpdateCityRequest } from './dto/request/updateCityRequest.dto';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ErrorResponse } from 'src/common/dto/error.dto';
 import { IdParam } from 'src/common/param/id.param';
+import { query } from 'express';
 
 @Controller('city')
 @ApiTags('city')
@@ -46,10 +48,16 @@ export class CityController {
    * query all city
    */
   @Get()
-  async query(): Promise<CityResponse[]> {
-    return CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.query),
-    );
+  async query(@Query('stateId') stateId: string): Promise<CityResponse[]> {
+    if (stateId) {
+      return CityResponse.fromEntityList(
+        await atomic(this.connection, this.cityService.queryByStateId, stateId),
+      );
+    } else {
+      return CityResponse.fromEntityList(
+        await atomic(this.connection, this.cityService.query),
+      );
+    }
   }
 
   /**

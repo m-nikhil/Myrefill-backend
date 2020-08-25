@@ -118,4 +118,13 @@ export class CityService {
     }
     return result;
   }
+  /**
+   * query city table by stateId
+   */
+  async queryByStateId(
+    transactionRunner: QueryRunner,
+    stateId: string,
+  ): Promise<City[]> {
+    return transactionRunner.manager.find(stateId);
+  }
 }
