@@ -96,14 +96,24 @@ export class CityService {
   /**
    * query city table
    */
-  async query(transactionRunner: QueryRunner): Promise<City[]> {
-    const result: City[] = await CityService.queryCity(
-      transactionRunner,
-    ).execute();
-    if (result.length == 0) {
-      throw new EntityNotFoundError(City, null);
+  async query(
+    transactionRunner: QueryRunner,
+    stateId: string,
+  ): Promise<City[]> {
+    if (stateId) {
+      const result: City[] = await transactionRunner.manager.find(stateId);
+      if (result.length == 0) {
+        throw new EntityNotFoundError(City, null);
+      }
+    } else {
+      const result: City[] = await CityService.queryCity(
+        transactionRunner,
+      ).execute();
+      if (result.length == 0) {
+        throw new EntityNotFoundError(City, null);
+      }
+      return result;
     }
-    return result;
   }
 
   /**
