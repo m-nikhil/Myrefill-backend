@@ -25,7 +25,6 @@ import { JWT } from 'src/common/decorators/jwt.decorator';
   type: ErrorResponse,
   description: 'Entity not found.',
 })
-@JWT()
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -37,16 +36,10 @@ export class UserController {
    */
   @Post()
   async create(
-    @Request() req,
     @Body() createUserRequest: CreateUserRequest,
   ): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(
-        this.connection,
-        this.userService.create,
-        req.user.userId,
-        createUserRequest,
-      ),
+      await atomic(this.connection, this.userService.create, createUserRequest),
     );
   }
 
@@ -54,6 +47,7 @@ export class UserController {
    * query all user
    */
   @Get()
+  @JWT()
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.query),
@@ -64,6 +58,7 @@ export class UserController {
    * query all user including deleted
    */
   @Get('all')
+  @JWT()
   async queryAll(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.queryAll),
@@ -74,6 +69,7 @@ export class UserController {
    * get a user by id
    */
   @Get(':id')
+  @JWT()
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
       await atomic(this.connection, this.userService.getById, params.id),
@@ -84,6 +80,7 @@ export class UserController {
    * delete a user by id
    */
   @Delete(':id')
+  @JWT()
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,

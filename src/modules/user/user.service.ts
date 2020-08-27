@@ -15,13 +15,11 @@ export class UserService {
    */
   async create(
     transactionRunner: QueryRunner,
-    userId: string,
     createUserRequest: CreateUserRequest,
   ): Promise<User> {
     const user: User = Builder((createUserRequest as unknown) as User)
-      .lastUpdatedBy(userId)
+      .lastUpdatedBy('')
       .build();
-
     return transactionRunner.manager.save(User, user);
   }
 
