@@ -57,7 +57,7 @@ export class CityController {
   @Get()
   async query(): Promise<CityResponse[]> {
     return CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.query),
+      await atomic(this.connection, this.cityService.query.bind(this)),
     );
   }
 
@@ -67,7 +67,7 @@ export class CityController {
   @Get('all')
   async queryAll(): Promise<CityResponse[]> {
     return CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.queryAll),
+      await atomic(this.connection, this.cityService.queryAll.bind(this)),
     );
   }
 
@@ -77,7 +77,11 @@ export class CityController {
   @Get(':id')
   async find(@Param() params: IdParam): Promise<CityResponse> {
     return CityResponse.fromEntity(
-      await atomic(this.connection, this.cityService.getById, params.id),
+      await atomic(
+        this.connection,
+        this.cityService.getById.bind(this),
+        params.id,
+      ),
     );
   }
 
@@ -94,7 +98,7 @@ export class CityController {
     return CityResponse.fromEntity(
       await atomic(
         this.connection,
-        this.cityService.update,
+        this.cityService.update.bind(this),
         req.user.userId,
         params.id,
         updateCityRequest,
@@ -110,7 +114,7 @@ export class CityController {
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,
-      this.cityService.delete,
+      this.cityService.delete.bind(this),
       req.user.userId,
       params.id,
     );

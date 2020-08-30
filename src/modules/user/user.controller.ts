@@ -39,7 +39,11 @@ export class UserController {
     @Body() createUserRequest: CreateUserRequest,
   ): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(this.connection, this.userService.create, createUserRequest),
+      await atomic(
+        this.connection,
+        this.userService.create.bind(this),
+        createUserRequest,
+      ),
     );
   }
 
@@ -50,7 +54,7 @@ export class UserController {
   @JWT()
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
-      await atomic(this.connection, this.userService.query),
+      await atomic(this.connection, this.userService.query.bind(this)),
     );
   }
 
@@ -61,7 +65,7 @@ export class UserController {
   @JWT()
   async queryAll(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
-      await atomic(this.connection, this.userService.queryAll),
+      await atomic(this.connection, this.userService.queryAll.bind(this)),
     );
   }
 
@@ -72,7 +76,11 @@ export class UserController {
   @JWT()
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(this.connection, this.userService.getById, params.id),
+      await atomic(
+        this.connection,
+        this.userService.getById.bind(this),
+        params.id,
+      ),
     );
   }
 
@@ -84,7 +92,7 @@ export class UserController {
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,
-      this.userService.delete,
+      this.userService.delete.bind(this),
       req.user.userId,
       params.id,
     );
