@@ -44,7 +44,7 @@ export class StateController {
     return StateResponse.fromEntity(
       await atomic(
         this.connection,
-        this.stateService.create.bind(this),
+        this.stateService.create,
         req.user.userId,
         createStateRequest,
       ),
@@ -57,7 +57,7 @@ export class StateController {
   @Get()
   async query(): Promise<StateResponse[]> {
     return StateResponse.fromEntityList(
-      await atomic(this.connection, this.stateService.query.bind(this)),
+      await atomic(this.connection, this.stateService.query),
     );
   }
 
@@ -67,7 +67,7 @@ export class StateController {
   @Get('all')
   async queryAll(): Promise<StateResponse[]> {
     return StateResponse.fromEntityList(
-      await atomic(this.connection, this.stateService.queryAll.bind(this)),
+      await atomic(this.connection, this.stateService.queryAll),
     );
   }
 
@@ -77,11 +77,7 @@ export class StateController {
   @Get(':id')
   async find(@Param() params: IdParam): Promise<StateResponse> {
     return StateResponse.fromEntity(
-      await atomic(
-        this.connection,
-        this.stateService.getById.bind(this),
-        params.id,
-      ),
+      await atomic(this.connection, this.stateService.getById, params.id),
     );
   }
 
@@ -98,7 +94,7 @@ export class StateController {
     return StateResponse.fromEntity(
       await atomic(
         this.connection,
-        this.stateService.update.bind(this),
+        this.stateService.update,
         req.user.userId,
         params.id,
         updateStateRequest,
@@ -114,7 +110,7 @@ export class StateController {
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,
-      this.stateService.delete.bind(this),
+      this.stateService.delete,
       req.user.userId,
       params.id,
     );

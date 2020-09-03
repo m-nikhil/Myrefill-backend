@@ -41,7 +41,8 @@ export class UserController {
     return UserResponse.fromEntity(
       await atomic(
         this.connection,
-        this.userService.create.bind(this),
+        this.userService.create,
+        '', // no user
         createUserRequest,
       ),
     );
@@ -54,7 +55,7 @@ export class UserController {
   @JWT()
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
-      await atomic(this.connection, this.userService.query.bind(this)),
+      await atomic(this.connection, this.userService.query),
     );
   }
 
@@ -65,7 +66,7 @@ export class UserController {
   @JWT()
   async queryAll(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
-      await atomic(this.connection, this.userService.queryAll.bind(this)),
+      await atomic(this.connection, this.userService.queryAll),
     );
   }
 
@@ -78,7 +79,7 @@ export class UserController {
     return UserResponse.fromEntity(
       await atomic(
         this.connection,
-        this.userService.getById.bind(this),
+        this.userService.getById,
         params.id,
       ),
     );
@@ -92,7 +93,7 @@ export class UserController {
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,
-      this.userService.delete.bind(this),
+      this.userService.delete,
       req.user.userId,
       params.id,
     );
