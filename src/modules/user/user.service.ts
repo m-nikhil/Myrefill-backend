@@ -12,7 +12,10 @@ export class UserService extends CRUDService<User, CreateUserRequest, null> {
    * get user by email
    * Don't throw error. Null value is needed by the auth flow.
    */
-  getByEmail = async (queryRunner: QueryRunner, email: string): Promise<User> => {
+  getByEmail = async (
+    queryRunner: QueryRunner,
+    email: string,
+  ): Promise<User> => {
     return queryRunner.manager.findOne(User, { email: email });
-  }
+  };
 }

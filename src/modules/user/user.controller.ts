@@ -77,11 +77,7 @@ export class UserController {
   @JWT()
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(
-        this.connection,
-        this.userService.getById,
-        params.id,
-      ),
+      await atomic(this.connection, this.userService.getById, params.id),
     );
   }
 
