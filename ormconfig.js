@@ -9,9 +9,9 @@ module.exports = [
     "username": process.env.DATABASE_USER,
     "password": process.env.DATABASE_PASSWORD,
     "database": "myrefill",
-    "entities": ["dist/**/*.entity.js"],
+    "entities": ["src/**/*.entity.ts"],
     "migrations": [
-        "dist/migrations/**/*.js"
+        "src/migrations/**/*.ts"
       ],
       "cli": {
         "migrationsDir": "src/migrations"
