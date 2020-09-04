@@ -37,6 +37,7 @@
     "class-validator": "^0.12.2",
     "dockerode": "^3.2.1",
     "dotenv": "^8.2.0",
+    "lower-case": "^2.0.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -45,6 +46,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
+    "title-case": "^3.0.2",
     "typeorm": "^0.2.25"
   },
   "devDependencies": {

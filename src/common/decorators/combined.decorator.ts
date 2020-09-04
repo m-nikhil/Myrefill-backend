@@ -1,13 +1,8 @@
-import {
-  MinLength,
-  MaxLength,
-  Matches,
-  IsAlpha,
-  IsEmail,
-} from 'class-validator';
+import { MinLength, MaxLength, Matches, IsEmail } from 'class-validator';
 import { applyDecorators } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { capitalCase } from 'change-case';
+import { titleCase } from 'title-case';
+import { lowerCase } from 'lower-case';
 
 /**
  * Combined decorator for UUID
@@ -29,10 +24,13 @@ export function UUID() {
  */
 export function Word() {
   return applyDecorators(
-    IsAlpha(),
-    MinLength(3),
-    MaxLength(15),
-    Transform((str: string) => capitalCase(str)),
+    Matches(/^[A-Za-z ]+$/),
+    MinLength(2),
+    MaxLength(25),
+    Transform((str: string) => {
+      str = lowerCase(str);
+      return titleCase(str);
+    }),
   );
 }
 
