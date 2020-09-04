@@ -18,6 +18,7 @@ import { CreateStateRequest } from './dto/request/createStateRequest.dto';
 import { StateResponse } from './dto/response/stateResponse.dto';
 import { UpdateStateRequest } from './dto/request/updateStateRequest.dto';
 import { JWT } from 'src/common/decorators/jwt.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('state')
 @ApiTags('state')
@@ -37,6 +38,7 @@ export class StateController {
    */
   @Post()
   @JWT()
+  @Roles('admin')
   async create(
     @Request() req,
     @Body() createStateRequest: CreateStateRequest,
@@ -65,6 +67,8 @@ export class StateController {
    * query all state including deleted
    */
   @Get('all')
+  @JWT()
+  @Roles('admin')
   async queryAll(): Promise<StateResponse[]> {
     return StateResponse.fromEntityList(
       await atomic(this.connection, this.stateService.queryAll),
@@ -86,6 +90,7 @@ export class StateController {
    */
   @Put(':id')
   @JWT()
+  @Roles('admin')
   async update(
     @Request() req,
     @Param() params: IdParam,
@@ -107,6 +112,7 @@ export class StateController {
    */
   @Delete(':id')
   @JWT()
+  @Roles('admin')
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,

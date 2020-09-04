@@ -24,7 +24,22 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { name: user.fullname, sub: user.id };
+    const payload = { name: user.fullname, sub: user.id, roles: 'user' };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
+  }
+
+  /**
+   * userId is random uuid, shouldn't change.
+   * Force create a user with this uuid, so there no collision.
+   */
+  async adminLogin() {
+    const payload = {
+      name: 'superuser',
+      sub: 'ea019b58-6ea9-4645-afcc-e1f86d173261',
+      roles: 'admin',
+    };
     return {
       accessToken: this.jwtService.sign(payload),
     };

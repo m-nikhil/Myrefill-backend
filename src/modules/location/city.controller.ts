@@ -18,6 +18,7 @@ import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { ErrorResponse } from 'src/common/dto/error.dto';
 import { IdParam } from 'src/common/param/id.param';
 import { JWT } from 'src/common/decorators/jwt.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('city')
 @ApiTags('city')
@@ -37,6 +38,7 @@ export class CityController {
    */
   @Post()
   @JWT()
+  @Roles('admin')
   async create(
     @Request() req,
     @Body() createCityRequest: CreateCityRequest,
@@ -65,6 +67,8 @@ export class CityController {
    * query all city including deleted
    */
   @Get('all')
+  @JWT()
+  @Roles('admin')
   async queryAll(): Promise<CityResponse[]> {
     return CityResponse.fromEntityList(
       await atomic(this.connection, this.cityService.queryAll),
@@ -86,6 +90,7 @@ export class CityController {
    */
   @Put(':id')
   @JWT()
+  @Roles('admin')
   async update(
     @Request() req,
     @Param() params: IdParam,
@@ -107,6 +112,7 @@ export class CityController {
    */
   @Delete(':id')
   @JWT()
+  @Roles('admin')
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,

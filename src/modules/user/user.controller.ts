@@ -17,6 +17,7 @@ import { CreateUserRequest } from './dto/request/createUserRequest.dto';
 import { UserResponse } from './dto/response/userResponse.dto';
 import { UserService } from './user.service';
 import { JWT } from 'src/common/decorators/jwt.decorator';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('user')
 @ApiTags('user')
@@ -53,6 +54,7 @@ export class UserController {
    */
   @Get()
   @JWT()
+  @Roles('admin')
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.query),
@@ -64,6 +66,7 @@ export class UserController {
    */
   @Get('all')
   @JWT()
+  @Roles('admin')
   async queryAll(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.queryAll),
@@ -75,6 +78,7 @@ export class UserController {
    */
   @Get(':id')
   @JWT()
+  @Roles('admin')
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
       await atomic(this.connection, this.userService.getById, params.id),
@@ -86,6 +90,7 @@ export class UserController {
    */
   @Delete(':id')
   @JWT()
+  @Roles('admin')
   async delete(@Request() req, @Param() params: IdParam): Promise<string> {
     return atomic(
       this.connection,
