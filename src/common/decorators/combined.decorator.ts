@@ -35,6 +35,13 @@ export function Word() {
 }
 
 /**
+ * Combined decorator for Text with max limit.
+ */
+export function Text() {
+  return applyDecorators(MaxLength(100));
+}
+
+/**
  * Combined decorator for password.
  */
 export function Password() {
