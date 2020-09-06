@@ -3,7 +3,7 @@ export interface PostgresQueryFailedError {
   message: string;
   name: string;
   length: number;
-  code: number;
+  code: string;
   severity: string;
   detail: string;
   hint: string;

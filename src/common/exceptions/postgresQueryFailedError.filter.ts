@@ -25,21 +25,39 @@ export class QueryFailedErrorExceptionFilter implements ExceptionFilter {
     let status;
     let errorResponse;
 
-    if (exception.code == 23505) {
-      // unique_violation
-      status = HttpStatus.CONFLICT;
-      errorResponse = new ErrorResponse(
-        status,
-        request.url,
-        'Entity already exists',
-      );
-    } else {
-      status = HttpStatus.INTERNAL_SERVER_ERROR;
-      errorResponse = new ErrorResponse(
-        status,
-        request.url,
-        'Please Contact Admin if the error persists',
-      );
+    console.log(exception);
+
+    switch (exception.code) {
+      case '23505': {
+        // unique_violation
+        status = HttpStatus.CONFLICT;
+        errorResponse = new ErrorResponse(
+          status,
+          request.url,
+          'Entity already exists',
+        );
+        break;
+      }
+      case '23503': {
+        // foreign_key_violation
+        status = HttpStatus.BAD_REQUEST;
+        let tableName = exception.detail.match(/\([a-zA-Z]*\)/)[0];
+        tableName = tableName.substring(1, tableName.length - 1);
+        errorResponse = new ErrorResponse(
+          status,
+          request.url,
+          'Invalid ' + tableName,
+        );
+        break;
+      }
+      default: {
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+        errorResponse = new ErrorResponse(
+          status,
+          request.url,
+          'Please Contact Admin if the error persists',
+        );
+      }
     }
 
     response.status(status).json(errorResponse);
