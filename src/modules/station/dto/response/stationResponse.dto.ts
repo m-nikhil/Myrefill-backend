@@ -9,24 +9,14 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
-import { Station } from 'src/entities/station.entity';
-import { Expose, plainToClass } from 'class-transformer';
+import { Expose } from 'class-transformer';
+import { ResponseBase } from 'src/common/dto/responseBase.dto';
 
 /**
  * Station response will all the fields.
  * To be displayed only for admins.
  */
-export class StationResponse {
-  static fromEntity(station: Station): StationResponse {
-    return plainToClass(StationResponse, station, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  static fromEntityList(stationList: Station[]): StationResponse[] {
-    return stationList.map(data => StationResponse.fromEntity(data));
-  }
-
+export class StationResponse extends ResponseBase {
   @IsUUID()
   @Expose()
   readonly id: string;

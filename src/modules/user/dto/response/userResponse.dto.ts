@@ -1,31 +1,18 @@
 import { Word } from 'src/common/decorators/combined.decorator';
-import { Builder } from 'builder-pattern';
-import { User } from 'src/entities/user.entity';
 import { IsUUID } from 'class-validator';
+import { ResponseBase } from 'src/common/dto/responseBase.dto';
+import { Expose } from 'class-transformer';
 
-export class UserResponse {
-  static fromEntity(user: User) {
-    return Builder(UserResponse)
-      .id(user.id)
-      .fullname(user.fullname)
-      .email(user.email)
-      .build();
-  }
-
-  static fromEntityList(userList: User[]) {
-    const userDtoList: UserResponse[] = [];
-    userList.forEach(user => {
-      userDtoList.push(UserResponse.fromEntity(user));
-    });
-    return userDtoList;
-  }
-
+export class UserResponse extends ResponseBase {
   @IsUUID()
+  @Expose()
   readonly id: string;
 
   @Word()
+  @Expose()
   readonly fullname: string;
 
   @Word()
+  @Expose()
   readonly email: string;
 }

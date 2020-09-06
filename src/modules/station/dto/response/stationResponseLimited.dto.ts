@@ -1,23 +1,13 @@
 import { Word, Text } from 'src/common/decorators/combined.decorator';
 import { IsDecimal, IsBoolean, IsInt, IsUUID } from 'class-validator';
-import { Station } from 'src/entities/station.entity';
-import { Expose, plainToClass } from 'class-transformer';
+import { Expose } from 'class-transformer';
+import { ResponseBase } from 'src/common/dto/responseBase.dto';
 
 /**
  * Station response will limited fields.
  * To be displayed for users.
  */
-export class StationLimitedResponse {
-  static fromEntity(station: Station): StationLimitedResponse {
-    return plainToClass(StationLimitedResponse, station, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  static fromEntityList(stationList: Station[]): StationLimitedResponse[] {
-    return stationList.map(data => StationLimitedResponse.fromEntity(data));
-  }
-
+export class StationLimitedResponse extends ResponseBase {
   @IsUUID()
   @Expose()
   readonly id: string;

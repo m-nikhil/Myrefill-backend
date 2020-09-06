@@ -1,27 +1,14 @@
 import { Word } from 'src/common/decorators/combined.decorator';
-import { Builder } from 'builder-pattern';
-import { State } from 'src/entities/state.entity';
 import { IsUUID } from 'class-validator';
+import { ResponseBase } from 'src/common/dto/responseBase.dto';
+import { Expose } from 'class-transformer';
 
-export class StateResponse {
-  static fromEntity(state: State) {
-    return Builder(StateResponse)
-      .id(state.id)
-      .name(state.name)
-      .build();
-  }
-
-  static fromEntityList(stateList: State[]) {
-    const stateDtoList: StateResponse[] = [];
-    stateList.forEach(city => {
-      stateDtoList.push(StateResponse.fromEntity(city));
-    });
-    return stateDtoList;
-  }
-
+export class StateResponse extends ResponseBase {
   @IsUUID()
+  @Expose()
   readonly id: string;
 
   @Word()
+  @Expose()
   readonly name: string;
 }
