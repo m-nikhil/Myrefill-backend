@@ -1,5 +1,17 @@
 require('dotenv').config()
 
+let entities = ["dist/**/*.entity.js"]
+let migrations = [
+  "dist/migrations/**/*.js"
+]
+
+if (process.env.TS_NODE) {
+  entities = ["src/**/*.entity.ts"]
+  migrations = [
+    "src/migrations/**/*.ts"
+  ]
+}
+
 module.exports = [
   {
     "name": "default",
@@ -9,12 +21,10 @@ module.exports = [
     "username": process.env.DATABASE_USER,
     "password": process.env.DATABASE_PASSWORD,
     "database": "myrefill",
-    "entities": ["src/**/*.entity.ts"],
-    "migrations": [
-        "src/migrations/**/*.ts"
-      ],
-      "cli": {
-        "migrationsDir": "src/migrations"
-      }
+    "entities": entities,
+    "migrations": migrations,
+    "cli": {
+      "migrationsDir": "src/migrations"
+    }
   }
 ]
