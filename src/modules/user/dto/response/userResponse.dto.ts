@@ -1,6 +1,7 @@
-import { Word, UUID } from 'src/common/decorators/combined.decorator';
+import { Word } from 'src/common/decorators/combined.decorator';
 import { Builder } from 'builder-pattern';
 import { User } from 'src/entities/user.entity';
+import { IsUUID } from 'class-validator';
 
 export class UserResponse {
   static fromEntity(user: User) {
@@ -19,7 +20,7 @@ export class UserResponse {
     return userDtoList;
   }
 
-  @UUID()
+  @IsUUID()
   readonly id: string;
 
   @Word()

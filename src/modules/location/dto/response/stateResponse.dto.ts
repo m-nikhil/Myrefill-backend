@@ -1,6 +1,7 @@
-import { Word, UUID } from 'src/common/decorators/combined.decorator';
+import { Word } from 'src/common/decorators/combined.decorator';
 import { Builder } from 'builder-pattern';
 import { State } from 'src/entities/state.entity';
+import { IsUUID } from 'class-validator';
 
 export class StateResponse {
   static fromEntity(state: State) {
@@ -18,7 +19,7 @@ export class StateResponse {
     return stateDtoList;
   }
 
-  @UUID()
+  @IsUUID()
   readonly id: string;
 
   @Word()

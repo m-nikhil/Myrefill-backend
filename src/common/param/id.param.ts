@@ -1,6 +1,6 @@
-import { UUID } from '../decorators/combined.decorator';
+import { IsUUID } from 'class-validator';
 
 export class IdParam {
-  @UUID()
+  @IsUUID()
   id: string;
 }

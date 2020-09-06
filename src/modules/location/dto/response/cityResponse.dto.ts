@@ -1,6 +1,7 @@
-import { Word, UUID } from 'src/common/decorators/combined.decorator';
+import { Word } from 'src/common/decorators/combined.decorator';
 import { City } from 'src/entities/city.entity';
 import { Builder } from 'builder-pattern';
+import { IsUUID } from 'class-validator';
 
 export class CityResponse {
   static fromEntity(city: City) {
@@ -19,12 +20,12 @@ export class CityResponse {
     return cityDtoList;
   }
 
-  @UUID()
+  @IsUUID()
   readonly id: string;
 
   @Word()
   readonly name: string;
 
-  @UUID()
+  @IsUUID()
   readonly stateId: string;
 }

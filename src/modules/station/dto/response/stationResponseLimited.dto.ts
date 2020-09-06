@@ -1,4 +1,4 @@
-import { Word, UUID, Text } from 'src/common/decorators/combined.decorator';
+import { Word, Text } from 'src/common/decorators/combined.decorator';
 import { IsDecimal, IsBoolean, IsInt, IsUUID } from 'class-validator';
 import { Station } from 'src/entities/station.entity';
 import { Expose, plainToClass } from 'class-transformer';
@@ -18,7 +18,7 @@ export class StationLimitedResponse {
     return stationList.map(data => StationLimitedResponse.fromEntity(data));
   }
 
-  @UUID()
+  @IsUUID()
   @Expose()
   readonly id: string;
 

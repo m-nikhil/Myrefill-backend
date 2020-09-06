@@ -1,9 +1,10 @@
-import { Word, UUID } from 'src/common/decorators/combined.decorator';
+import { Word } from 'src/common/decorators/combined.decorator';
+import { IsUUID } from 'class-validator';
 
 export class CreateCityRequest {
   @Word()
   readonly name: string;
 
-  @UUID()
+  @IsUUID()
   readonly stateId: string;
 }

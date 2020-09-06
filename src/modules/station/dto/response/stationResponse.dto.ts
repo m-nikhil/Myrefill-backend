@@ -1,4 +1,4 @@
-import { Word, UUID, Text } from 'src/common/decorators/combined.decorator';
+import { Word, Text } from 'src/common/decorators/combined.decorator';
 import {
   IsMobilePhone,
   IsEmail,
@@ -27,7 +27,7 @@ export class StationResponse {
     return stationList.map(data => StationResponse.fromEntity(data));
   }
 
-  @UUID()
+  @IsUUID()
   @Expose()
   readonly id: string;
 
