@@ -20,7 +20,7 @@ module.exports = [
     "port": process.env.DATABASE_PORT,
     "username": process.env.DATABASE_USER,
     "password": process.env.DATABASE_PASSWORD,
-    "database": "myrefill",
+    "database": process.env.DATABASE_NAME,
     "entities": entities,
     "migrations": migrations,
     "cli": {
