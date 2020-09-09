@@ -19,10 +19,10 @@ import { Station } from './station.entity';
 @Entity()
 export class StationMetric {
   @PrimaryColumn('uuid')
-  stationId: string;
+  id: string;
 
   @OneToOne(() => Station, { primary: true })
-  @JoinColumn({ name: 'stationId' })
+  @JoinColumn({ name: 'id' })
   station: Station;
 
   @Column({ default: 0 })
