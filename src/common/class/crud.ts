@@ -12,6 +12,8 @@ class EntityBase {
 
 /**
  * Common CRUD operation
+ *
+ * In the entity & createDto, id field must exist.
  */
 @Injectable()
 export class CRUDService<
