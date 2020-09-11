@@ -5,9 +5,9 @@ import {
   IsPhoneNumber,
   IsDecimal,
   IsInt,
-  IsBoolean,
   IsOptional,
   IsUUID,
+  IsBooleanString,
 } from 'class-validator';
 
 export class UpdateStationRequest {
@@ -31,7 +31,7 @@ export class UpdateStationRequest {
   @IsOptional()
   readonly pincode?: number;
 
-  @IsBoolean()
+  @IsBooleanString()
   @IsOptional()
   readonly open?: boolean;
 

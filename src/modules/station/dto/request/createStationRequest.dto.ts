@@ -4,10 +4,10 @@ import {
   IsEmail,
   IsPhoneNumber,
   IsInt,
-  IsBoolean,
   IsOptional,
   IsUUID,
   IsNumber,
+  IsBooleanString,
 } from 'class-validator';
 
 export class CreateStationRequest {
@@ -26,7 +26,7 @@ export class CreateStationRequest {
   @IsInt()
   readonly pincode: number;
 
-  @IsBoolean()
+  @IsBooleanString()
   readonly open: boolean;
 
   @Word()
