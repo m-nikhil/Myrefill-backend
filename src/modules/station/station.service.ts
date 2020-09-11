@@ -7,6 +7,7 @@ import { QueryRunner } from 'typeorm';
 import { StationMetricService } from './stationMetric.service';
 import { Builder } from 'builder-pattern';
 import { CreateStationMetricRequest } from './dto/request/createStationMetricRequest.dto';
+import { StationListOption } from './dto/query/stationListOption.dto';
 
 /**
  * Arrow func can't be called with super. Use this.
@@ -16,7 +17,8 @@ import { CreateStationMetricRequest } from './dto/request/createStationMetricReq
 export class StationService extends CRUDService<
   Station,
   CreateStationRequest,
-  UpdateStationRequest
+  UpdateStationRequest,
+  StationListOption
 > {
   Entity = Station;
 

@@ -7,6 +7,7 @@ import {
   Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { atomic } from 'src/common/database/transaction';
 import { Connection } from 'typeorm';
@@ -21,6 +22,7 @@ import { CreateStationRequest } from './dto/request/createStationRequest.dto';
 import { StationResponse } from './dto/response/stationResponse.dto';
 import { UpdateStationRequest } from './dto/request/updateStationRequest.dto';
 import { StationLimitedResponse } from './dto/response/stationResponseLimited.dto';
+import { StationListOption } from './dto/query/stationListOption.dto';
 
 @Controller('station')
 @ApiTags('station')
@@ -63,16 +65,25 @@ export class StationController {
   @Get()
   @JWT()
   async query(
+    @Query() stationListOption: StationListOption,
     @Request() req,
   ): Promise<StationResponse[] | StationLimitedResponse[]> {
     if (req.user.roles.includes('admin')) {
       return StationResponse.fromEntityList(
-        await atomic(this.connection, this.stationService.query),
+        await atomic(
+          this.connection,
+          this.stationService.query,
+          stationListOption,
+        ),
       );
     }
 
     return StationLimitedResponse.fromEntityList(
-      await atomic(this.connection, this.stationService.query),
+      await atomic(
+        this.connection,
+        this.stationService.query,
+        stationListOption,
+      ),
     );
   }
 
@@ -82,9 +93,15 @@ export class StationController {
   @Get('all')
   @JWT()
   @Roles('admin')
-  async queryAll(): Promise<StationResponse[]> {
+  async queryAll(
+    @Query() stationListOption: StationListOption,
+  ): Promise<StationResponse[]> {
     return StationResponse.fromEntityList(
-      await atomic(this.connection, this.stationService.queryAll),
+      await atomic(
+        this.connection,
+        this.stationService.queryAll,
+        stationListOption,
+      ),
     );
   }
 
