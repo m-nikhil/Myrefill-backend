@@ -3,6 +3,7 @@ import { City } from 'src/entities/city.entity';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
 import { UpdateCityRequest } from './dto/request/updateCityRequest.dto';
 import { CRUDService } from 'src/common/class/crud';
+import { CityListOption } from './dto/query/cityListOption.dto';
 
 /**
  * CityService has the CRUD operation for the city entity.
@@ -11,7 +12,8 @@ import { CRUDService } from 'src/common/class/crud';
 export class CityService extends CRUDService<
   City,
   CreateCityRequest,
-  UpdateCityRequest
+  UpdateCityRequest,
+  CityListOption
 > {
   Entity = City;
 }

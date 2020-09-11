@@ -19,7 +19,8 @@ class EntityBase {
 export class CRUDService<
   EntityType extends EntityBase,
   CreateRequestDtoType,
-  UpdateRequestDtoType
+  UpdateRequestDtoType,
+  ListOptionType = undefined
 > {
   Entity: typeof EntityBase;
 
@@ -120,18 +121,28 @@ export class CRUDService<
     return id;
   };
 
-  queryEntity = (queryRunner: QueryRunner): SelectQueryBuilder<EntityBase> => {
+  queryEntity = (
+    queryRunner: QueryRunner,
+    listOption: ListOptionType,
+  ): SelectQueryBuilder<EntityBase> => {
     return queryRunner.manager
       .createQueryBuilder()
       .select()
-      .from(this.Entity, 'tableAlias');
+      .from(this.Entity, 'tableAlias')
+      .where(listOption);
   };
 
   /**
    * query entity table
    */
-  query = async (queryRunner: QueryRunner): Promise<EntityType[]> => {
-    const result: EntityType[] = await this.queryEntity(queryRunner).execute();
+  query = async (
+    queryRunner: QueryRunner,
+    listOption?: ListOptionType,
+  ): Promise<EntityType[]> => {
+    const result: EntityType[] = await this.queryEntity(
+      queryRunner,
+      listOption,
+    ).execute();
     if (result.length == 0) {
       throw new EntityNotFoundError(this.Entity, null);
     }
@@ -141,8 +152,11 @@ export class CRUDService<
   /**
    * query entity table including soft deleted
    */
-  queryAll = async (queryRunner: QueryRunner): Promise<EntityType[]> => {
-    const result: EntityType[] = await this.queryEntity(queryRunner)
+  queryAll = async (
+    queryRunner: QueryRunner,
+    listOption?: ListOptionType,
+  ): Promise<EntityType[]> => {
+    const result: EntityType[] = await this.queryEntity(queryRunner, listOption)
       .withDeleted()
       .execute();
     if (result.length == 0) {

@@ -7,6 +7,7 @@ import {
   Put,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CityResponse } from './dto/response/cityResponse.dto';
 import { CreateCityRequest } from './dto/request/createCityRequest.dto';
@@ -19,6 +20,7 @@ import { ErrorResponse } from 'src/common/dto/error.dto';
 import { IdParam } from 'src/common/param/id.param';
 import { JWT } from 'src/common/decorators/jwt.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { CityListOption } from './dto/query/cityListOption.dto';
 
 @Controller('city')
 @ApiTags('city')
@@ -57,9 +59,11 @@ export class CityController {
    * query all city
    */
   @Get()
-  async query(): Promise<CityResponse[]> {
+  async query(
+    @Query() cityListOption: CityListOption,
+  ): Promise<CityResponse[]> {
     return CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.query),
+      await atomic(this.connection, this.cityService.query, cityListOption),
     );
   }
 
@@ -69,9 +73,11 @@ export class CityController {
   @Get('all')
   @JWT()
   @Roles('admin')
-  async queryAll(): Promise<CityResponse[]> {
+  async queryAll(
+    @Query() cityListOption: CityListOption,
+  ): Promise<CityResponse[]> {
     return CityResponse.fromEntityList(
-      await atomic(this.connection, this.cityService.queryAll),
+      await atomic(this.connection, this.cityService.queryAll, cityListOption),
     );
   }
 
