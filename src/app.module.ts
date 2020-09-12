@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StationModule } from './modules/station/station.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { FormsModule } from './modules/forms/forms.module';
+import { ComplaintController } from './modules/forms/complaint.controller';
 
 @Module({
   imports: [
@@ -17,5 +18,6 @@ import { FormsModule } from './modules/forms/forms.module';
     TransactionModule,
     FormsModule,
   ],
+  controllers: [ComplaintController],
 })
 export class AppModule {}
