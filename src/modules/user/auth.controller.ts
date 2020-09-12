@@ -15,6 +15,8 @@ import { AuthService } from './auth.service';
 import { JWT } from 'src/common/decorators/jwt.decorator';
 import { ConfigService } from '@nestjs/config';
 import { AdminLoginRequest } from './dto/request/adminLoginRequest.dto';
+import { UserResponse } from './dto/response/userResponse.dto';
+import { Connection } from 'typeorm';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -27,6 +29,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private configService: ConfigService,
+    private connection: Connection,
   ) {}
 
   @ApiBody({ type: LoginRequest })
@@ -37,10 +40,7 @@ export class AuthController {
   }
 
   @Post('admin-login')
-  async adminLogin(
-    @Request() req,
-    @Body() adminLoginRequest: AdminLoginRequest,
-  ) {
+  async adminLogin(@Body() adminLoginRequest: AdminLoginRequest) {
     if (
       adminLoginRequest.password != this.configService.get<string>('ADMIN_PASS')
     ) {
@@ -51,7 +51,12 @@ export class AuthController {
 
   @JWT()
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Request() req): Promise<UserResponse> {
+    return UserResponse.fromEntity(
+      await this.authService.profile(
+        this.connection.createQueryRunner(),
+        req.user.userId,
+      ),
+    );
   }
 }

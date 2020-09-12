@@ -44,4 +44,11 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
     };
   }
+
+  profile = async (
+    transactionRunner: QueryRunner,
+    userId: string,
+  ): Promise<User> => {
+    return this.userService.getById(transactionRunner, userId);
+  };
 }
