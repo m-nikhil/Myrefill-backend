@@ -27,6 +27,12 @@ export class User {
   fullname: string;
 
   @Column()
+  phoneNumber: string;
+
+  @Column()
+  razorpayCustomerId: string;
+
+  @Column()
   lastUpdatedBy: string;
 
   @CreateDateColumn({ type: 'timestamp' })
