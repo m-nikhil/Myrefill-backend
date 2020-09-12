@@ -1,12 +1,53 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserRequest } from './dto/request/createUserRequest.dto';
+import {
+  CreateUserRequestInternal,
+  CreateUserRequest,
+} from './dto/request/createUserRequest.dto';
 import { User } from 'src/entities/user.entity';
 import { CRUDService } from 'src/common/class/crud';
 import { QueryRunner } from 'typeorm';
+import { Builder } from 'builder-pattern';
+import { RazorpayService } from '../thirdparty/razorpay.service';
 
 @Injectable()
-export class UserService extends CRUDService<User, CreateUserRequest, null> {
+export class UserService extends CRUDService<
+  User,
+  CreateUserRequestInternal,
+  null
+> {
   Entity = User;
+
+  constructor(private razorpayService: RazorpayService) {
+    super();
+  }
+
+  /**
+   * create new entity
+   */
+  superCreate = this.create;
+  create = async (
+    queryRunner: QueryRunner,
+    userId: string,
+    createUserRequestDto: CreateUserRequest,
+  ): Promise<User> => {
+    const razorpayCustomer: RazorpayCustomer = await this.razorpayService.createCustomer(
+      createUserRequestDto.fullname,
+      createUserRequestDto.email,
+      createUserRequestDto.phoneNumber,
+    );
+
+    const createUserRequestInternalDto = Builder(
+      createUserRequestDto as CreateUserRequestInternal,
+    )
+      .razorpayCustomerId(razorpayCustomer.id)
+      .build();
+
+    return await this.superCreate(
+      queryRunner,
+      userId,
+      createUserRequestInternalDto,
+    );
+  };
 
   /**
    * get user by email

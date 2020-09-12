@@ -10,6 +10,7 @@ import { AuthController } from './auth.controller';
 import { LocalStrategy } from './authStrategies/local.strategy';
 import { JwtStrategy } from './authStrategies/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ThirdpartyModule } from '../thirdparty/thirdparty.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
     ConfigModule,
+    ThirdpartyModule,
   ],
   providers: [UserService, AuthService, LocalStrategy, JwtStrategy],
   controllers: [UserController, AuthController],

@@ -1,5 +1,5 @@
 import { Word } from 'src/common/decorators/combined.decorator';
-import { IsUUID } from 'class-validator';
+import { IsUUID, IsMobilePhone } from 'class-validator';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 import { Expose } from 'class-transformer';
 
@@ -15,4 +15,11 @@ export class UserResponse extends ResponseBase {
   @Word()
   @Expose()
   readonly email: string;
+
+  @IsMobilePhone('en-IN')
+  @Expose()
+  readonly phoneNumber: string;
+
+  @Expose()
+  razorpayCustomerId: string;
 }

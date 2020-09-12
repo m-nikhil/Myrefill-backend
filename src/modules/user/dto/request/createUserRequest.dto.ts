@@ -1,5 +1,5 @@
 import { Word, Password } from 'src/common/decorators/combined.decorator';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsMobilePhone } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 /**
@@ -15,8 +15,15 @@ export class CreateUserRequest {
   @Password()
   readonly password: string;
 
+  @IsMobilePhone('en-IN')
+  readonly phoneNumber: string;
+
   @Match('password', {
     message: 'password and confirmation password do not match',
   })
   readonly confirmPassword: string;
+}
+
+export class CreateUserRequestInternal extends CreateUserRequest {
+  razorpayCustomerId: string;
 }
