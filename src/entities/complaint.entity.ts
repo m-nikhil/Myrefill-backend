@@ -19,21 +19,21 @@ export class Complaint {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid', nullable: false })
+  @Column({ type: 'uuid'})
   stationId: string;
 
   @ManyToOne(() => Station)
   @JoinColumn({ name: 'stationId' })
   station: Station;
 
-  @Column({ type: 'uuid', nullable: false })
+  @Column({ type: 'uuid'})
   userId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({nullable : false})
+  @Column()
   comment: string;
 
   @Column()
