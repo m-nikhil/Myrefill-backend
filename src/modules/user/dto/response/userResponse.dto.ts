@@ -1,5 +1,5 @@
 import { Word } from 'src/common/decorators/combined.decorator';
-import { IsUUID, IsMobilePhone } from 'class-validator';
+import { IsUUID, IsMobilePhone, IsEmail } from 'class-validator';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 import { Expose } from 'class-transformer';
 
@@ -12,7 +12,7 @@ export class UserResponse extends ResponseBase {
   @Expose()
   readonly fullname: string;
 
-  @Word()
+  @IsEmail()
   @Expose()
   readonly email: string;
 
