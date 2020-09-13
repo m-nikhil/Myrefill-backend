@@ -1,5 +1,9 @@
-import { Controller, Post, Request, Body } from '@nestjs/common';
-import { ApiTags, ApiResponse } from '@nestjs/swagger';
+import { Controller, Post, Request, Body, Get, Render } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiResponse,
+  ApiOperation,
+} from '@nestjs/swagger';
 import { ErrorResponse } from 'src/common/dto/error.dto';
 import { TransactionService } from './transaction.service';
 import { CreateRazorpayOrderRequest } from './dto/request/createRazorpayOrderRequest.dto';
@@ -29,5 +33,20 @@ export class TransactionController {
       req.user.userId,
       createRazorpayOrderRequest,
     );
+  }
+
+  @ApiOperation({
+    summary:
+      'Open the path (/transaction/razorpay-payment) in a browser tab.',
+  })
+  @Get('/razorpay-payment')
+  @Render('razorpayPayment')
+  razorpayWebPayment() {
+    return {
+      key: 'rzp_test_HbdgkZNaPBegQQ',
+      amount: 600,
+      orderId: 'order_FcSDMOxynKD8f3',
+      customerId: 'cust_Fc2RRm3sBKPuZQ',
+    };
   }
 }

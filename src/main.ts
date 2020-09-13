@@ -4,9 +4,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { QueryFailedErrorExceptionFilter } from './common/exceptions/postgresQueryFailedError.filter';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   /**
    * Swagger configuations
@@ -36,6 +38,13 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  /**
+   *  View engine configuation
+   */
+  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.setViewEngine('hbs');
 
   await app.listen(3000, '0.0.0.0');
 }
