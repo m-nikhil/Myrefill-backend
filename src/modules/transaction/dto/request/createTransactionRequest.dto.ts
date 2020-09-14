@@ -1,14 +1,14 @@
 import { IsUUID, IsInt, IsNumber, IsEnum, IsString } from 'class-validator';
 
 enum Status {
-  unrecognized,
-  success,
-  failure,
+  unrecognized = 'unrecognized',
+  success = 'success',
+  failure = 'failure',
 }
 
 enum PaymentMethod {
-  unrecognized,
-  razorpay,
+  unrecognized = 'unrecognized',
+  razorpay = 'razorpay',
 }
 
 /**
