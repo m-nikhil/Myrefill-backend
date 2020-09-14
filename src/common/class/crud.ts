@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import { Builder } from 'builder-pattern';
+import { QueryPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 class EntityBase {
   lastUpdatedBy: string;
@@ -18,8 +19,6 @@ class EntityBase {
 @Injectable()
 export class CRUDService<
   EntityType extends EntityBase,
-  CreateRequestDtoType,
-  UpdateRequestDtoType,
   ListOptionType = undefined
 > {
   Entity: typeof EntityBase;
@@ -30,7 +29,7 @@ export class CRUDService<
   create = async (
     queryRunner: QueryRunner,
     userId: string,
-    createRequestDto: CreateRequestDtoType,
+    createRequestDto: QueryPartialEntity<EntityType>,
   ): Promise<EntityType> => {
     const entity = Builder((createRequestDto as unknown) as EntityType)
       .lastUpdatedBy(userId)
@@ -64,23 +63,21 @@ export class CRUDService<
    * update entity by id, if deletedAt is null,
    * else throw `EntityNotFoundError`.
    *
-   * Update lastUpdatedBy column.
    */
   update = async (
     queryRunner: QueryRunner,
     userId: string,
     id: string,
-    updateRequestDto: UpdateRequestDtoType,
+    updateJson: QueryPartialEntity<EntityType>,
   ): Promise<EntityType> => {
-    const entity = Builder((updateRequestDto as unknown) as EntityType)
-      .lastUpdatedBy(userId)
-      .build();
+    updateJson.lastUpdatedBy = userId;
 
-    const updateResult = await queryRunner.manager.update(
-      this.Entity,
-      id,
-      entity,
-    );
+    const updateResult = await queryRunner.manager
+      .createQueryBuilder()
+      .update(this.Entity)
+      .set(updateJson)
+      .where('id = :id and deletedAt is null', { id: id })
+      .execute();
 
     const success: boolean = updateResult.affected > 0;
     if (!success) {

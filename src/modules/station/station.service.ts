@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CRUDService } from 'src/common/class/crud';
 import { Station } from 'src/entities/station.entity';
 import { CreateStationRequest } from './dto/request/createStationRequest.dto';
-import { UpdateStationRequest } from './dto/request/updateStationRequest.dto';
 import { QueryRunner } from 'typeorm';
 import { StationMetricService } from './stationMetric.service';
 import { Builder } from 'builder-pattern';
@@ -14,12 +13,7 @@ import { StationListOption } from './dto/query/stationListOption.dto';
  * Ref: https://stackoverflow.com/questions/57561473/how-to-invoke-arrow-functions-on-a-superclass-with-super-in-subclass
  */
 @Injectable()
-export class StationService extends CRUDService<
-  Station,
-  CreateStationRequest,
-  UpdateStationRequest,
-  StationListOption
-> {
+export class StationService extends CRUDService<Station, StationListOption> {
   Entity = Station;
 
   constructor(private readonly stationMetricService: StationMetricService) {

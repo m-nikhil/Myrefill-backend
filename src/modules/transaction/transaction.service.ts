@@ -6,7 +6,6 @@ import { RazorypayOrderResponse } from './dto/response/razorypayOrderResponse.dt
 import { Builder } from 'builder-pattern';
 import { CRUDService } from 'src/common/class/crud';
 import { Transaction } from 'src/entities/transaction.entity';
-import { CreateTransactionRequest } from './dto/request/createTransactionRequest.dto';
 import { TransactionListOption } from './query/transactionListOption.dto';
 
 /**
@@ -15,8 +14,6 @@ import { TransactionListOption } from './query/transactionListOption.dto';
 @Injectable()
 export class TransactionService extends CRUDService<
   Transaction,
-  CreateTransactionRequest,
-  null,
   TransactionListOption
 > {
   Entity = Transaction;

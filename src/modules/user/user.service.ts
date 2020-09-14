@@ -10,11 +10,7 @@ import { Builder } from 'builder-pattern';
 import { RazorpayService } from '../thirdparty/razorpay.service';
 
 @Injectable()
-export class UserService extends CRUDService<
-  User,
-  CreateUserRequestInternal,
-  null
-> {
+export class UserService extends CRUDService<User> {
   Entity = User;
 
   constructor(private razorpayService: RazorpayService) {
