@@ -61,12 +61,7 @@ export class TransactionController {
   @Get('/razorpay-payment')
   @Render('razorpayPayment')
   razorpayWebPayment() {
-    return {
-      key: 'rzp_test_HbdgkZNaPBegQQ',
-      amount: 600,
-      orderId: 'order_FcSDMOxynKD8f3',
-      customerId: 'cust_Fc2RRm3sBKPuZQ',
-    };
+    return {};
   }
 
   /**
