@@ -11,5 +11,6 @@ import { StationMetricController } from './stationMetric.controller';
   imports: [TypeOrmModule.forFeature([Station, StationMetric])],
   providers: [StationService, StationMetricService],
   controllers: [StationController, StationMetricController],
+  exports: [StationMetricService],
 })
 export class StationModule {}
