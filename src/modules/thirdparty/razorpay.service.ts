@@ -44,11 +44,15 @@ export class RazorpayService {
       currency: 'INR',
       payment_capture: 1, // eslint-disable-line
       notes: {
-        station: stationId,
+        stationId: stationId,
         userId: userId,
-        numberOfhalfLitre: numberOfhalfLitre,
+        numberOfHalfLitre: numberOfhalfLitre,
         price: price,
       },
     });
+  };
+
+  getOrderById = async (orderId: string): Promise<RazorpayOrder> => {
+    return this.instance.orders.fetch(orderId);
   };
 }

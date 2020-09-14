@@ -1,4 +1,4 @@
-import { IsUUID, IsInt, IsNumber, IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 
 enum Status {
   unrecognized = 'unrecognized',
@@ -18,18 +18,6 @@ enum PaymentMethod {
  * are introduced to ensure the input data integrity.
  */
 export class CreateTransactionRequest {
-  @IsUUID()
-  readonly stationId: string;
-
-  @IsUUID()
-  readonly userId: string;
-
-  @IsInt()
-  readonly numberOfHalfLitres: number;
-
-  @IsNumber()
-  readonly totalPrice: number;
-
   @IsString()
   readonly razorpayPaymentId: string;
 

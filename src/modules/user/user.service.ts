@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  CreateUserRequestInternal
-} from './dto/request/createUserRequest.dto';
+import { CreateUserRequestInternal } from './dto/request/createUserRequest.dto';
 import { User } from 'src/entities/user.entity';
 import { CRUDService } from 'src/common/class/crud';
 import { QueryRunner } from 'typeorm';

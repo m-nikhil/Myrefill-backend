@@ -1,6 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { RazorpayService } from '../thirdparty/razorpay.service';
-import { CreateRazorpayOrderRequest } from './dto/request/createRazorpayOrderRequest.dto';
 import { ConfigService } from '@nestjs/config';
 import { RazorypayOrderResponse } from './dto/response/razorypayOrderResponse.dto';
 import { Builder } from 'builder-pattern';
@@ -9,7 +8,6 @@ import { Transaction } from 'src/entities/transaction.entity';
 import { TransactionListOption } from './query/transactionListOption.dto';
 import { QueryRunner } from 'typeorm';
 import { StationMetricService } from '../station/stationMetric.service';
-import { CreateTransactionRequest } from './dto/request/createTransactionRequest.dto';
 import * as crypto from 'crypto';
 
 /**
@@ -32,7 +30,7 @@ export class TransactionService extends CRUDService<
 
   createRazorpayOrder = async (
     userId,
-    createRazorpayOrderRequest: CreateRazorpayOrderRequest,
+    createRazorpayOrderRequest: Partial<Transaction>,
   ): Promise<RazorypayOrderResponse> => {
     const order = await this.razorpayService.createOrder(
       createRazorpayOrderRequest.stationId,
@@ -52,7 +50,7 @@ export class TransactionService extends CRUDService<
   create = async (
     queryRunner: QueryRunner,
     userId: string,
-    createTransactionRequestDto: CreateTransactionRequest,
+    createTransactionRequestDto: Partial<Transaction>,
   ): Promise<Transaction> => {
     const hmac = crypto.createHmac(
       'sha256',
@@ -70,6 +68,16 @@ export class TransactionService extends CRUDService<
       throw new BadRequestException('Invalid rapazpay signature');
     }
 
+    const order = await this.razorpayService.getOrderById(
+      createTransactionRequestDto.razorpayOrderId,
+    );
+
+    createTransactionRequestDto.numberOfHalfLitres =
+      order.notes.numberOfHalfLitre;
+    createTransactionRequestDto.totalPrice = order.notes.price;
+    createTransactionRequestDto.stationId = order.notes.stationId;
+    createTransactionRequestDto.userId = order.notes.userId;
+
     const transactionResponse = await this.superCreate(
       queryRunner,
       userId,
@@ -81,12 +89,11 @@ export class TransactionService extends CRUDService<
       await this.stationMetricService.update(
         queryRunner,
         userId,
-        createTransactionRequestDto.stationId,
+        order.notes.stationId,
         {
           numberOfUsers: () => '"numberOfUsers" + 1',
           lifetimeHalfLitres: () =>
-            '"lifetimeHalfLitres" + ' +
-            createTransactionRequestDto.numberOfHalfLitres,
+            '"lifetimeHalfLitres" + ' + order.notes.numberOfHalfLitre,
         },
       );
     }

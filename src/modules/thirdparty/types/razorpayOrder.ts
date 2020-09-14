@@ -9,6 +9,11 @@ interface RazorpayOrder {
   offer_id: string;
   status: string;
   attempts: number;
-  notes: JSON;
+  notes: {
+    stationId: string;
+    userId: string;
+    numberOfHalfLitre: number;
+    price: number;
+  };
   created_at: number;
 }
