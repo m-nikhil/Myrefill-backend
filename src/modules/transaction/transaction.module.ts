@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Transaction } from 'src/entities/transaction.entity';
-import { TransactionController } from './tansaction.controller';
+import { TransactionController } from './transaction.controller';
 import { TransactionService } from './transaction.service';
 import { ThirdpartyModule } from '../thirdparty/thirdparty.module';
 

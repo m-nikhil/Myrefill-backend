@@ -4,12 +4,29 @@ import { CreateRazorpayOrderRequest } from './dto/request/createRazorpayOrderReq
 import { ConfigService } from '@nestjs/config';
 import { RazorypayOrderResponse } from './dto/response/razorypayOrderResponse.dto';
 import { Builder } from 'builder-pattern';
+import { CRUDService } from 'src/common/class/crud';
+import { Transaction } from 'src/entities/transaction.entity';
+import { CreateTransactionRequest } from './dto/request/createTransactionRequest.dto';
+import { TransactionListOption } from './query/transactionListOption.dto';
+
+/**
+ * Transaction Service
+ */
 @Injectable()
-export class TransactionService {
+export class TransactionService extends CRUDService<
+  Transaction,
+  CreateTransactionRequest,
+  null,
+  TransactionListOption
+> {
+  Entity = Transaction;
+
   constructor(
     private razorpayService: RazorpayService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    super();
+  }
 
   createRazorpayOrder = async (
     userId,
