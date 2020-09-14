@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { RazorpayService } from '../thirdparty/razorpay.service';
 import { CreateRazorpayOrderRequest } from './dto/request/createRazorpayOrderRequest.dto';
 import { ConfigService } from '@nestjs/config';
@@ -10,6 +10,7 @@ import { TransactionListOption } from './query/transactionListOption.dto';
 import { QueryRunner } from 'typeorm';
 import { StationMetricService } from '../station/stationMetric.service';
 import { CreateTransactionRequest } from './dto/request/createTransactionRequest.dto';
+import * as crypto from 'crypto';
 
 /**
  * Transaction Service
@@ -53,6 +54,22 @@ export class TransactionService extends CRUDService<
     userId: string,
     createTransactionRequestDto: CreateTransactionRequest,
   ): Promise<Transaction> => {
+    const hmac = crypto.createHmac(
+      'sha256',
+      this.configService.get<string>('RAZORPAY_SECRET'),
+    );
+    hmac.update(
+      createTransactionRequestDto.razorpayOrderId +
+        '|' +
+        createTransactionRequestDto.razorpayPaymentId,
+    );
+    const generatedSignature = hmac.digest('hex');
+
+    if (generatedSignature != createTransactionRequestDto.razorpaySignature) {
+      // Signature mismatch
+      throw new BadRequestException('Invalid rapazpay signature');
+    }
+
     const transactionResponse = await this.superCreate(
       queryRunner,
       userId,
