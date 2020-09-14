@@ -12,14 +12,14 @@ import { Station } from './station.entity';
 import { User } from './user.entity';
 
 enum Status {
-  unrecognized,
-  success,
-  failure,
+  unrecognized = 'unrecognized',
+  success = 'success',
+  failure = 'failure',
 }
 
 enum PaymentMethod {
-  unrecognized,
-  razorpay,
+  unrecognized = 'unrecognized',
+  razorpay = 'razorpay',
 }
 
 /**
