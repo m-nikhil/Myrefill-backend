@@ -29,7 +29,7 @@ export class CRUDService<
   create = async (
     queryRunner: QueryRunner,
     userId: string,
-    createRequestDto: QueryPartialEntity<EntityType>,
+    createRequestDto: Partial<EntityType>,
   ): Promise<EntityType> => {
     const entity = Builder((createRequestDto as unknown) as EntityType)
       .lastUpdatedBy(userId)
@@ -68,7 +68,7 @@ export class CRUDService<
     queryRunner: QueryRunner,
     userId: string,
     id: string,
-    updateJson: QueryPartialEntity<EntityType>,
+    updateJson: QueryPartialEntity<EntityType> | Partial<EntityType>,
   ): Promise<EntityType> => {
     updateJson.lastUpdatedBy = userId;
 

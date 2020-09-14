@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  CreateUserRequestInternal,
-  CreateUserRequest,
+  CreateUserRequestInternal
 } from './dto/request/createUserRequest.dto';
 import { User } from 'src/entities/user.entity';
 import { CRUDService } from 'src/common/class/crud';
@@ -24,7 +23,7 @@ export class UserService extends CRUDService<User> {
   create = async (
     queryRunner: QueryRunner,
     userId: string,
-    createUserRequestDto: CreateUserRequest,
+    createUserRequestDto: Partial<User>,
   ): Promise<User> => {
     const razorpayCustomer: RazorpayCustomer = await this.razorpayService.createCustomer(
       createUserRequestDto.fullname,

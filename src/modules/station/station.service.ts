@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CRUDService } from 'src/common/class/crud';
 import { Station } from 'src/entities/station.entity';
-import { CreateStationRequest } from './dto/request/createStationRequest.dto';
 import { QueryRunner } from 'typeorm';
 import { StationMetricService } from './stationMetric.service';
 import { Builder } from 'builder-pattern';
@@ -27,7 +26,7 @@ export class StationService extends CRUDService<Station, StationListOption> {
   create = async (
     queryRunner: QueryRunner,
     userId: string,
-    createStationRequestDto: CreateStationRequest,
+    createStationRequestDto: Partial<Station>,
   ): Promise<Station> => {
     const stationResponse = await this.superCreate(
       queryRunner,
