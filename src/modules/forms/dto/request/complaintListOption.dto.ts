@@ -4,4 +4,8 @@ export class ComplaintListOption {
   @IsUUID()
   @IsOptional()
   readonly stationId?: string;
+
+  @IsUUID()
+  @IsOptional()
+  readonly userId?: string;
 }
