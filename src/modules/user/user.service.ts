@@ -43,6 +43,27 @@ export class UserService extends CRUDService<User> {
   };
 
   /**
+   * delete user then mask email & name for privacy
+   */
+  superDelete = this.delete;
+  delete = async (
+    queryRunner: QueryRunner,
+    userId: string,
+    id: string,
+  ): Promise<string> => {
+    const updateRequestDto = Builder<Partial<User>>()
+      .fullname(id)
+      .email(id)
+      .build();
+
+    console.log(updateRequestDto);
+
+    await this.update(queryRunner, userId, id, updateRequestDto);
+
+    return await this.superDelete(queryRunner, userId, id);
+  };
+
+  /**
    * get user by email
    * Don't throw error. Null value is needed by the auth flow.
    */
