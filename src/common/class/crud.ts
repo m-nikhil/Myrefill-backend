@@ -74,13 +74,18 @@ export class CRUDService<
 
     // Update set needs to have only fields in the Entity.
     // This statement remove any extra fields.
+    const fields = queryRunner.connection
+      .getMetadata(this.Entity)
+      .ownColumns.map(column => column.propertyName);
+    console.log(fields);
     const entity = Object.entries(updateJson)
-      .filter(([key]) => Object.keys(this.Entity).includes(key))
+      .filter(([key]) => fields.includes(key))
       .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {});
 
     const updateResult = await queryRunner.manager
       .createQueryBuilder()
-      .update(this.Entity, entity)
+      .update(this.Entity)
+      .set(entity)
       .where('id = :id and deletedAt is null', { id: id })
       .execute();
 

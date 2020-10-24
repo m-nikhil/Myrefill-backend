@@ -17,7 +17,6 @@ export class UpdateUserRequest {
   @Match('password', {
     message: 'password and confirmation password do not match',
   })
-  @IsOptional()
   readonly confirmPassword: string;
 
   @Email()
