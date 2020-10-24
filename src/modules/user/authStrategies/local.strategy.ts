@@ -21,13 +21,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     private authService: AuthService,
     private connection: Connection,
   ) {
-    super({ usernameField: 'email' });
+    super({ usernameField: 'auth_email', passwordField: 'auth_password' });
   }
 
   async validate(email: string, password: string): Promise<User> {
     const loginRequest = Builder(LoginRequest)
-      .email(email)
-      .password(password)
+      .auth_email(email)
+      .auth_password(password)
       .build();
     await validateOrReject(loginRequest, {
       validationError: { target: false },
@@ -37,8 +37,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await atomic(
       this.connection,
       this.authService.validateUser.bind(this.authService),
-      loginRequest.email,
-      loginRequest.password,
+      loginRequest.auth_email,
+      loginRequest.auth_password,
     );
     if (!user) {
       throw new UnauthorizedException();

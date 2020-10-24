@@ -6,8 +6,8 @@ import { IsEmail } from 'class-validator';
  */
 export class LoginRequest {
   @IsEmail()
-  readonly email: string;
+  readonly auth_email: string;
 
   @Password()
-  readonly password: string;
+  readonly auth_password: string;
 }

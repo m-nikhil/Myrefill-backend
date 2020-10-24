@@ -15,11 +15,15 @@ export class RolesGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
-
     if (roles) {
       const user = context.switchToHttp().getRequest().user;
-
-      if (!this.matchRoles(roles, user.roles)) {
+      const idParam = context.switchToHttp().getRequest().params?.id;
+      if (
+        !(
+          this.matchRoles(roles, user.roles) ||
+          this.selfCheck(roles, user.userId, idParam)
+        )
+      ) {
         throw new UnauthorizedException();
       }
     }
@@ -28,5 +32,19 @@ export class RolesGuard implements CanActivate {
 
   matchRoles(roles: string[], userRoles: string[]) {
     return roles.filter(value => userRoles.includes(value)).length > 0;
+  }
+
+  /**
+   * check for 'self' role, a specific role
+   * that check if current user is the owner of the
+   * resource.
+   */
+  selfCheck(roles: string[], userId: string, idParam: string) {
+    if (roles.includes('self')) {
+      if (userId == idParam) {
+        return true;
+      }
+    }
+    return false;
   }
 }

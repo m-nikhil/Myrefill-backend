@@ -6,6 +6,8 @@ import {
   Get,
   Param,
   Delete,
+  Put,
+  UseGuards,
 } from '@nestjs/common';
 
 import { atomic } from 'src/common/database/transaction';
@@ -18,6 +20,8 @@ import { UserResponse } from './dto/response/userResponse.dto';
 import { UserService } from './user.service';
 import { JWT } from 'src/common/decorators/jwt.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { AuthGuard } from '@nestjs/passport';
+import { UpdateUserRequest } from './dto/request/updateUserRequest.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -58,6 +62,30 @@ export class UserController {
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.query),
+    );
+  }
+
+  /**
+   * update a user by id
+   */
+  @Put(':id')
+  @JWT()
+  @Roles('admin', 'self')
+  @UseGuards(AuthGuard('local'))
+  async update(
+    @Request() req,
+    @Param() params: IdParam,
+    @Body()
+    updateUserRequest: UpdateUserRequest,
+  ): Promise<UserResponse> {
+    return UserResponse.fromEntity(
+      await atomic(
+        this.connection,
+        this.userService.update,
+        req.user.userId,
+        params.id,
+        updateUserRequest,
+      ),
     );
   }
 

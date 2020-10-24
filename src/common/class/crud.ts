@@ -72,10 +72,15 @@ export class CRUDService<
   ): Promise<EntityType> => {
     updateJson.lastUpdatedBy = userId;
 
+    // Update set needs to have only fields in the Entity.
+    // This statement remove any extra fields.
+    const entity = Object.entries(updateJson)
+      .filter(([key]) => Object.keys(this.Entity).includes(key))
+      .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {});
+
     const updateResult = await queryRunner.manager
       .createQueryBuilder()
-      .update(this.Entity)
-      .set(updateJson)
+      .update(this.Entity, entity)
       .where('id = :id and deletedAt is null', { id: id })
       .execute();
 
