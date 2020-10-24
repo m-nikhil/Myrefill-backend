@@ -1,5 +1,5 @@
-import { Password } from 'src/common/decorators/combined.decorator';
-import { IsMobilePhone, IsEmail, IsOptional } from 'class-validator';
+import { Password, Email } from 'src/common/decorators/combined.decorator';
+import { IsMobilePhone, IsOptional } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 /**
@@ -20,7 +20,7 @@ export class UpdateUserRequest {
   @IsOptional()
   readonly confirmPassword: string;
 
-  @IsEmail()
+  @Email()
   readonly auth_email: string;
 
   @Password()

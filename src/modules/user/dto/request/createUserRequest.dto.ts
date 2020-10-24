@@ -1,5 +1,9 @@
-import { Word, Password } from 'src/common/decorators/combined.decorator';
-import { IsEmail, IsMobilePhone } from 'class-validator';
+import {
+  Word,
+  Password,
+  Email,
+} from 'src/common/decorators/combined.decorator';
+import { IsMobilePhone } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 /**
@@ -9,7 +13,7 @@ export class CreateUserRequest {
   @Word()
   readonly fullname: string;
 
-  @IsEmail()
+  @Email()
   readonly email: string;
 
   @Password()

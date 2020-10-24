@@ -1,11 +1,10 @@
-import { Password } from 'src/common/decorators/combined.decorator';
-import { IsEmail } from 'class-validator';
+import { Password, Email } from 'src/common/decorators/combined.decorator';
 
 /**
  * login request
  */
 export class LoginRequest {
-  @IsEmail()
+  @Email()
   readonly auth_email: string;
 
   @Password()
