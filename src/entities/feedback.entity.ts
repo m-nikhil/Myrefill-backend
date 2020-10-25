@@ -8,7 +8,6 @@ import {
   JoinColumn,
   OneToOne,
 } from 'typeorm';
-import { User } from './user.entity';
 import { Transaction } from './transaction.entity';
 
 enum Rating {
@@ -31,7 +30,7 @@ export class Feedback {
   @Column({ type: 'uuid' })
   transactionId: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => Transaction)
   @JoinColumn({ name: 'transactionId' })
   transaction: Transaction;
 
