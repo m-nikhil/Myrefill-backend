@@ -5,6 +5,7 @@ import { CRUDService } from 'src/common/class/crud';
 import { QueryRunner } from 'typeorm';
 import { Builder } from 'builder-pattern';
 import { RazorpayService } from '../thirdparty/razorpay.service';
+import { Coupon } from 'src/entities/coupon.entity';
 
 @Injectable()
 export class UserService extends CRUDService<User> {
@@ -35,11 +36,13 @@ export class UserService extends CRUDService<User> {
       .razorpayCustomerId(razorpayCustomer.id)
       .build();
 
-    return await this.superCreate(
+    let createdUser=await this.superCreate(
       queryRunner,
       userId,
       createUserRequestInternalDto,
     );
+    await queryRunner.manager.insert(Coupon,{userId:createdUser.id, points:0, lastUpdatedBy: userId});
+    return createdUser;
   };
 
   /**

@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StationModule } from './modules/station/station.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { FormsModule } from './modules/forms/forms.module';
+import { CouponModule } from './modules/coupon/coupon.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FormsModule } from './modules/forms/forms.module';
     StationModule,
     TransactionModule,
     FormsModule,
+    CouponModule,
   ],
 })
 export class AppModule {}
