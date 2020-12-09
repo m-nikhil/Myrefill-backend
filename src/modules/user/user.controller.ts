@@ -22,7 +22,7 @@ import { JWT } from 'src/common/decorators/jwt.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserRequest } from './dto/request/updateUserRequest.dto';
-import { ResetPasswordRequest } from './dto/request/ResetPasswordRequest.dto';
+import { ResetPasswordRequest } from './dto/request/resetPasswordRequest.dto';
 
 @Controller('user')
 @ApiTags('user')
