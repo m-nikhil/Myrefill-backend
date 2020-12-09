@@ -6,7 +6,7 @@ import { QueryRunner } from 'typeorm';
 import { Builder } from 'builder-pattern';
 import { RazorpayService } from '../thirdparty/razorpay.service';
 import { Coupon } from 'src/entities/coupon.entity';
-import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
+// import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 const otplib=require('otplib');
 
