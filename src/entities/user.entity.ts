@@ -43,4 +43,10 @@ export class User {
 
   @DeleteDateColumn({ type: 'timestamp' })
   deletedAt: Date;
+
+  @Column()
+  emailOTP: string;
+
+  @Column()
+  token: string;
 }

@@ -22,6 +22,7 @@ import { JWT } from 'src/common/decorators/jwt.decorator';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserRequest } from './dto/request/updateUserRequest.dto';
+import { ResetPasswordRequest } from './dto/request/ResetPasswordRequest.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -125,6 +126,30 @@ export class UserController {
       this.userService.delete,
       req.user.userId,
       params.id,
+    );
+  }
+
+  @Post('password/resetLink')
+  async forgotpassword(
+    @Body('emailId')
+    emailId: String
+  ): Promise<Boolean>{
+    return atomic(
+      this.connection,
+      this.userService.sendResetPasswordOTP,
+      emailId,
+    );
+  }
+
+  @Post('password/updatePwd')
+  async resetForgotPassword(
+    @Body()
+    resetPasswordRequest: ResetPasswordRequest
+  ): Promise<Boolean> {
+    return atomic(
+      this.connection,
+      this.userService.resetForgotPassword,
+      resetPasswordRequest
     );
   }
 }

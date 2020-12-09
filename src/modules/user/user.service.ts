@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserRequestInternal } from './dto/request/createUserRequest.dto';
 import { User } from 'src/entities/user.entity';
 import { CRUDService } from 'src/common/class/crud';
@@ -6,6 +6,9 @@ import { QueryRunner } from 'typeorm';
 import { Builder } from 'builder-pattern';
 import { RazorpayService } from '../thirdparty/razorpay.service';
 import { Coupon } from 'src/entities/coupon.entity';
+import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+const otplib=require('otplib');
 
 @Injectable()
 export class UserService extends CRUDService<User> {
@@ -76,4 +79,108 @@ export class UserService extends CRUDService<User> {
   ): Promise<User> => {
     return queryRunner.manager.findOne(User, { email: email });
   };
+
+  sendResetPasswordOTP = async (
+    queryRunner: QueryRunner,
+    emailId: string,
+  ): Promise<Boolean> => {
+    let user=await queryRunner.manager.findOne(User, { email: emailId });
+    
+    if(!user){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `EmailID you entered is invalid.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //generate otp
+    otplib.authenticator.options = {
+      step: 900, //15 mins
+      digits: 6
+    };
+    const secret = otplib.authenticator.generateSecret();
+    var token = otplib.authenticator.generate(secret);
+
+    //send email template
+    // resetPasswordTemplate("",token,user.email);
+
+    //update user with last otp
+    const updateResult = await queryRunner.manager
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        emailOTP: token,
+        token: secret
+      })
+      .where('id = :id', { id: user.id })
+      .execute();
+
+    const success: boolean = updateResult.affected > 0;
+    if (!success) {
+      throw new EntityNotFoundError(User, user.id);
+    }
+    
+    return true;
+  }
+
+  resetForgotPassword = async (
+    queryRunner: QueryRunner,
+    data
+  ): Promise<Boolean> => {
+    let user=await queryRunner.manager.findOne(User, { email: data.emailId });
+    // console.log(user);
+    if(!user){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `EmailID you entered is invalid.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    if(!user.emailOTP || user.emailOTP!==data.emailCode ){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Code invalid.Enter Valid one from Email.(or) Code used already.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    if(data.newPassword!==data.confirmPassword){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Passwords are not matching.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //check otp valid
+    otplib.authenticator.options = {
+      step: 900 //15 mins
+    };
+    var res = otplib.authenticator.check(data.emailCode, user.token);
+    console.log(res);
+    if(!res){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Code Expired.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    const updateResult = await queryRunner.manager
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        password: data.newPassword,
+        emailOTP: null,
+        token: null
+      })
+      .where('id = :id', { id: user.id })
+      .execute();
+
+    const success: boolean = updateResult.affected > 0;
+    if (!success) {
+      throw new EntityNotFoundError(User, user.id);
+    }
+    
+    return true;
+  }
+
+
 }
