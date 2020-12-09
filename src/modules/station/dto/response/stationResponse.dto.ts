@@ -9,7 +9,7 @@ import {
   IsOptional,
   IsUUID,
 } from 'class-validator';
-import { Expose } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 
 /**
@@ -122,4 +122,17 @@ export class StationResponse extends ResponseBase {
   @IsDecimal()
   @Expose()
   readonly longitude: number;
+
+  @Text()
+  @Expose()
+  @Transform((val)=>{
+    if(val){
+      if(val<1){
+        return Math.round(parseFloat(val)*1000)+" m"
+      }
+      let converted=parseFloat(val).toFixed(3);
+      return converted+" "+"Km";
+    }
+  })
+  readonly distanceInKms: string;
 }

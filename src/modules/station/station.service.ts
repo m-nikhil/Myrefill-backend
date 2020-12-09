@@ -6,6 +6,7 @@ import { StationMetricService } from './stationMetric.service';
 import { Builder } from 'builder-pattern';
 import { CreateStationMetricRequest } from './dto/request/createStationMetricRequest.dto';
 import { StationListOption } from './dto/query/stationListOption.dto';
+import { StationResponse } from './dto/response/stationResponse.dto';
 
 /**
  * Arrow func can't be called with super. Use this.
@@ -59,4 +60,18 @@ export class StationService extends CRUDService<Station, StationListOption> {
     await this.stationMetricService.delete(queryRunner, userId, id);
     return await this.superDelete(queryRunner, userId, id);
   };
+
+  getNearByStations= async (
+    queryRunner: QueryRunner,
+    data
+  ): Promise<StationResponse>=>{
+    let nearbyStationsQry=`select * from (select s.*,(((acos(sin(( '${data.latitude}' * pi() / 180))*sin(( cast(latitude as double precision) * pi() / 180)) 
+    + cos(( '${data.latitude}' * pi() /180 ))*cos(( cast(latitude as double precision) * pi() / 180)) 
+    * cos((( '${data.longitude}' - cast(longitude as double precision)) * pi()/180)))) * 180/pi()) * 60 * 1.1515 * 1.609344) as "distanceInKms"
+    from station s where latitude is not null and longitude is not null ) station where abs("distanceInKms")<=${(data.radiusInMetres/1000)} 
+    order by "distanceInKms" asc`;
+
+    // console.log(nearbyStationsQry);
+    return await queryRunner.manager.query(nearbyStationsQry);
+  }
 }

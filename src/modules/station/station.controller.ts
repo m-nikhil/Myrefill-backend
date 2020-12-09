@@ -23,6 +23,7 @@ import { StationResponse } from './dto/response/stationResponse.dto';
 import { UpdateStationRequest } from './dto/request/updateStationRequest.dto';
 import { StationLimitedResponse } from './dto/response/stationResponseLimited.dto';
 import { StationListOption } from './dto/query/stationListOption.dto';
+import { stationLocationParams } from './dto/request/stationLocationParams.dto';
 
 @Controller('station')
 @ApiTags('station')
@@ -161,6 +162,22 @@ export class StationController {
       this.stationService.delete,
       req.user.userId,
       params.id,
+    );
+  }
+
+  @Post('nearby')
+  @JWT()
+  @Roles('admin')
+  async getNearByPlaces(
+    @Body()
+    locationParams: stationLocationParams
+  ): Promise<StationResponse[]> {
+    return StationResponse.fromEntityList(
+      await atomic(
+        this.connection,
+        this.stationService.getNearByStations,
+        locationParams,
+      ),
     );
   }
 }

@@ -13,7 +13,7 @@
     "start": "nest start",
     "start:dev": "env-cmd -e development nest start --watch",
     "start:debug": "env-cmd -e development nest start --debug --watch",
-    "start:prod": "env-cmd -e production node dist/main",
+    "start:prod": "env-cmd -e production node dist/src/main",
     "db:dev": "node dev-database.js",
     "db:prod": "node prod-database.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

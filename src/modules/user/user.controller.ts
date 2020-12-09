@@ -23,6 +23,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { UpdateUserRequest } from './dto/request/updateUserRequest.dto';
 import { ResetPasswordRequest } from './dto/request/resetPasswordRequest.dto';
+import { changePasswordRequest } from './dto/request/changePasswordRequest.dto';
 
 @Controller('user')
 @ApiTags('user')
@@ -129,6 +130,9 @@ export class UserController {
     );
   }
 
+  /**
+   * Send reset password link
+   */
   @Post('password/resetLink')
   async forgotpassword(
     @Body('emailId')
@@ -141,6 +145,9 @@ export class UserController {
     );
   }
 
+  /**
+   * update user password
+   */
   @Post('password/updatePwd')
   async resetForgotPassword(
     @Body()
@@ -150,6 +157,21 @@ export class UserController {
       this.connection,
       this.userService.resetForgotPassword,
       resetPasswordRequest
+    );
+  }
+
+  /**
+   * change user password
+   */
+  @Post('password/changePwd')
+  async changeUserPassword(
+    @Body()
+    changePasswordRequest: changePasswordRequest
+  ): Promise<Boolean> {
+    return atomic(
+      this.connection,
+      this.userService.changePassword,
+      changePasswordRequest
     );
   }
 }

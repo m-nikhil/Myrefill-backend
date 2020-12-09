@@ -182,5 +182,41 @@ export class UserService extends CRUDService<User> {
     return true;
   }
 
+  changePassword = async(
+    queryRunner: QueryRunner,
+    data
+  ):Promise<Boolean> =>{
+    let user=await queryRunner.manager.findOne(User, { id: data.userId });
+    console.log(user);
+    if(!user){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Invalid User.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    if(user.password!==data.oldPassword){
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Old password is incorrect.Enter valid one.`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    const updateResult = await queryRunner.manager
+      .createQueryBuilder()
+      .update(User)
+      .set({
+        password: data.newPassword,
+      })
+      .where('id = :id', { id: data.userId })
+      .execute();
+
+    const success: boolean = updateResult.affected > 0;
+    if (!success) {
+      throw new EntityNotFoundError(User, user.id);
+    }
+
+    return true;
+  }
 
 }
