@@ -6,7 +6,11 @@ import {
   Index,
   UpdateDateColumn,
   DeleteDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
+import { City } from './city.entity';
+import { State } from './state.entity';
 
 /**
  * Represents User
@@ -31,6 +35,29 @@ export class User {
 
   @Column()
   razorpayCustomerId: string;
+
+  @Column({ type: 'float', default: 0 })
+  CO2saved: number;
+
+  @Column({ type: 'float', default: 0 })
+  bottlesSaved: number;
+
+  @Column({ type: 'float', default: 0 })
+  plasticSaved: number;
+
+  @Column()
+  stateId: string;
+
+  @ManyToOne(() => State)
+  @JoinColumn({ name: 'stateId' })
+  state: State;
+
+  @Column()
+  cityId: string;
+
+  @ManyToOne(()=>City)
+  @JoinColumn({name:'cityId'})
+  city: City
 
   @Column()
   lastUpdatedBy: string;

@@ -72,7 +72,7 @@ export class CityController {
    */
   @Get('all')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async queryAll(
     @Query() cityListOption: CityListOption,
   ): Promise<CityResponse[]> {

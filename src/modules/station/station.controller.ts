@@ -93,7 +93,7 @@ export class StationController {
    */
   @Get('all')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async queryAll(
     @Query() stationListOption: StationListOption,
   ): Promise<StationResponse[]> {
@@ -167,7 +167,7 @@ export class StationController {
 
   @Post('nearby')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async getNearByPlaces(
     @Body()
     locationParams: stationLocationParams

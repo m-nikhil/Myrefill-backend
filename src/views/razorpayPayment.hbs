@@ -53,6 +53,7 @@
       "description": "Test Transaction",
       "handler": function (response) {
         console.log("order id : " + response.razorpay_order_id)
+        console.log(response);
         document.getElementById("order").textContent = "order id : " + response.razorpay_order_id;
         document.getElementById("payment").textContent = "payment id : " + response.razorpay_payment_id;
         document.getElementById("signature").textContent = "signature : " + response.razorpay_signature;

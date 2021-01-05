@@ -40,7 +40,7 @@ export class RolesGuard implements CanActivate {
    * resource.
    */
   selfCheck(roles: string[], userId: string, idParam: string) {
-    if (roles.includes('self')) {
+    if (roles.includes('user')) {
       if (userId == idParam) {
         return true;
       }

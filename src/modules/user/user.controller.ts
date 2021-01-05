@@ -72,7 +72,7 @@ export class UserController {
    */
   @Put(':id')
   @JWT()
-  @Roles('admin', 'self')
+  @Roles('admin', 'user')
   @UseGuards(AuthGuard('local'))
   async update(
     @Request() req,
@@ -108,7 +108,7 @@ export class UserController {
    */
   @Get(':id')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
       await atomic(this.connection, this.userService.getById, params.id),
@@ -165,12 +165,14 @@ export class UserController {
    */
   @Post('password/changePwd')
   async changeUserPassword(
+    @Request() req,
     @Body()
     changePasswordRequest: changePasswordRequest
   ): Promise<Boolean> {
     return atomic(
       this.connection,
       this.userService.changePassword,
+      req.user.userId,
       changePasswordRequest
     );
   }

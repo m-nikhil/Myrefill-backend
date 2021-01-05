@@ -8,6 +8,7 @@ import { RazorpayService } from '../thirdparty/razorpay.service';
 import { Coupon } from 'src/entities/coupon.entity';
 import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
+import { ses } from 'src/aws.js';
 const otplib=require('otplib');
 
 @Injectable()
@@ -102,7 +103,7 @@ export class UserService extends CRUDService<User> {
     var token = otplib.authenticator.generate(secret);
 
     //send email template
-    // resetPasswordTemplate("",token,user.email);
+    resetPasswordTemplate(ses,token,[user.email]);
 
     //update user with last otp
     const updateResult = await queryRunner.manager
@@ -184,9 +185,10 @@ export class UserService extends CRUDService<User> {
 
   changePassword = async(
     queryRunner: QueryRunner,
+    userId,
     data
   ):Promise<Boolean> =>{
-    let user=await queryRunner.manager.findOne(User, { id: data.userId });
+    let user=await queryRunner.manager.findOne(User, { id: userId });
     console.log(user);
     if(!user){
       throw new HttpException({
@@ -208,7 +210,7 @@ export class UserService extends CRUDService<User> {
       .set({
         password: data.newPassword,
       })
-      .where('id = :id', { id: data.userId })
+      .where('id = :id', { id: userId })
       .execute();
 
     const success: boolean = updateResult.affected > 0;

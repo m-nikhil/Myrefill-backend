@@ -124,11 +124,27 @@ export class TransactionController {
   }
 
   /**
+   * get transaction summary for current user
+   */
+  @Get('summary')
+  @JWT()
+  @Roles('admin','user')
+  async getDashboard(
+    @Request() req,
+  ): Promise<JSON> {
+    return await atomic(
+      this.connection, 
+      this.tansactionService.getSummary,
+      req.user.userId
+    )
+  }
+
+  /**
    * get a transaction by id
    */
   @Get(':id')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async find(@Param() params: IdParam): Promise<TransactionResponse> {
     return TransactionResponse.fromEntity(
       await atomic(this.connection, this.tansactionService.getById, params.id),

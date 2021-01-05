@@ -47,7 +47,7 @@ export class FeedbackController {
    */
   @Get('all')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async queryAll(
     @Query() feedbackListOption: FeedbackListOption,
   ): Promise<FeedbackResponse[]> {

@@ -39,7 +39,6 @@ export class CouponController {
    */
   @Post()
   @JWT()
-  @Roles('admin')
   async createOrUpdateCouponByUser(
     @Request() req,
     @Body() createCouponRequest: CreateCouponRequest,
@@ -59,7 +58,6 @@ export class CouponController {
    */
   @Post("redeem")
   @JWT()
-  @Roles('admin')
   async redeemCoupons(
     @Request() req,
     @Body() createCouponRequest: CreateCouponRequest,
@@ -92,7 +90,6 @@ export class CouponController {
    */
   @Get(':id')
   @JWT()
-  @Roles('admin')
   async find(@Param() params: IdParam): Promise<CouponResponse> {
     return CouponResponse.fromEntity(
       await atomic(this.connection, this.couponService.getCouponPoints, params.id),

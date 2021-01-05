@@ -1,4 +1,4 @@
-import { IsString, IsUUID } from 'class-validator';
+import { IsOptional, IsString, IsUUID } from 'class-validator';
 import {
   Password,
 } from 'src/common/decorators/combined.decorator';
@@ -9,6 +9,7 @@ import { Match } from 'src/common/decorators/match.decorator';
  */
 export class changePasswordRequest {
   @IsUUID()
+  @IsOptional()
   readonly userId: string;
 
   @IsString()

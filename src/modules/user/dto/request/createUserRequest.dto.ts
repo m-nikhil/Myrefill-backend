@@ -3,7 +3,7 @@ import {
   Password,
   Email,
 } from 'src/common/decorators/combined.decorator';
-import { IsMobilePhone } from 'class-validator';
+import { IsMobilePhone, IsUUID } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 /**
@@ -26,6 +26,12 @@ export class CreateUserRequest {
     message: 'password and confirmation password do not match',
   })
   readonly confirmPassword: string;
+
+  @IsUUID()
+  readonly stateId: string;
+
+  @IsUUID()
+  readonly cityId: string;
 }
 
 export class CreateUserRequestInternal extends CreateUserRequest {

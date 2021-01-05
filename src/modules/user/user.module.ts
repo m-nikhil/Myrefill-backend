@@ -33,5 +33,6 @@ import { ThirdpartyModule } from '../thirdparty/thirdparty.module';
   ],
   providers: [UserService, AuthService, LocalStrategy, JwtStrategy],
   controllers: [UserController, AuthController],
+  exports: [UserService]
 })
 export class UserModule {}

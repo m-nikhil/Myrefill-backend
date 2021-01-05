@@ -68,7 +68,7 @@ export class StateController {
    */
   @Get('all')
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async queryAll(): Promise<StateResponse[]> {
     return StateResponse.fromEntityList(
       await atomic(this.connection, this.stateService.queryAll),
