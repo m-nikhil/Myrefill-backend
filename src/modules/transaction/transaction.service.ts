@@ -13,6 +13,8 @@ import { CouponService } from '../coupon/coupon.service';
 import { Coupon } from 'src/entities/coupon.entity';
 import { UserService } from '../user/user.service';
 import { User } from 'src/entities/user.entity';
+import { StationService } from '../station/station.service';
+import { Station } from 'src/entities/station.entity';
 
 /**
  * Transaction Service
@@ -29,26 +31,28 @@ export class TransactionService extends CRUDService<
     private configService: ConfigService,
     private readonly stationMetricService: StationMetricService,
     private couponService: CouponService,
-    private userService: UserService
+    private userService: UserService,
+    private stationService: StationService
   ) {
     super();
   }
 
   createRazorpayOrder = async (
+    queryRunner: QueryRunner,
     userId,
     createRazorpayOrderRequest: Partial<Transaction>,
   ): Promise<RazorypayOrderResponse> => {
+    let station=await this.stationService.getById(queryRunner,createRazorpayOrderRequest.stationId);
     const order = await this.razorpayService.createOrder(
       createRazorpayOrderRequest.stationId,
       userId,
       createRazorpayOrderRequest.numberOfHalfLitres,
-      createRazorpayOrderRequest.numberOfHalfLitres *
-        this.configService.get<number>('PRICE_PER_HALF_LITRE'),
+      createRazorpayOrderRequest.numberOfHalfLitres * station.pricePerHalfLitre,
     );
 
     return Builder(RazorypayOrderResponse)
       .id(order.id)
-      .amount(order.amount_due / 100) // convert to rupee
+      .amount(order.amount_due) // convert to rupee
       .build();
   };
 
@@ -129,7 +133,20 @@ export class TransactionService extends CRUDService<
             .lastUpdatedBy(userId)
             .build()
         )
-      }      
+      }
+      
+      this.stationService.update(
+        queryRunner,
+        userId,
+        order.notes.stationId,
+        Builder<Partial<Station>>()
+            .CO2saved(user.CO2saved+(createTransactionRequestDto.numberOfHalfLitres/2))
+            .bottlesSaved(user.bottlesSaved+(createTransactionRequestDto.numberOfHalfLitres/2))
+            .plasticSaved(user.plasticSaved+(createTransactionRequestDto.numberOfHalfLitres*82.8))
+            .lastUpdatedBy(userId)
+            .build()
+      )
+      
     }
 
     return transactionResponse;

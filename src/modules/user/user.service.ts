@@ -8,9 +8,8 @@ import { RazorpayService } from '../thirdparty/razorpay.service';
 import { Coupon } from 'src/entities/coupon.entity';
 import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-import { ses } from 'src/aws.js';
+import * as AWS from 'src/aws';
 const otplib=require('otplib');
-
 @Injectable()
 export class UserService extends CRUDService<User> {
   Entity = User;
@@ -103,7 +102,7 @@ export class UserService extends CRUDService<User> {
     var token = otplib.authenticator.generate(secret);
 
     //send email template
-    resetPasswordTemplate(ses,token,[user.email]);
+    resetPasswordTemplate(AWS.ses,token,[user.email]);
 
     //update user with last otp
     const updateResult = await queryRunner.manager

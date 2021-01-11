@@ -149,7 +149,7 @@ const resetPasswordTemplate = (ses, otp, to) => {
         Charset: 'utf-8',
       },
     },
-    Source: 'noreply@dexxto.com',
+    Source: process.env.EMAIL_SENDER,
   };
   ses.sendEmail(params, function(err, data) {
     if (err) console.log(err, err.stack);

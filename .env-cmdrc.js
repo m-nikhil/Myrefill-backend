@@ -14,7 +14,9 @@ let commonVars={
     AWS_SES_ACCESS_KEY_ID:"AKIAJAT5ERHY2UMZS4LQ",
     AWS_SES_SECRET_ACCESS_KEY:"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",
 
-    PRICE_PER_HALF_LITRE:3
+    PRICE_PER_HALF_LITRE:3,
+
+    EMAIL_SENDER: "support@findmyrefill.com"
 }
 exports.development={
     "NODE_ENV":"development",

@@ -45,7 +45,9 @@ export class TransactionController {
     @Request() req,
     @Body() createRazorpayOrderRequest: CreateRazorpayOrderRequest,
   ): Promise<RazorypayOrderResponse> {
-    return await this.tansactionService.createRazorpayOrder(
+    return await atomic(
+      this.connection,
+      this.tansactionService.createRazorpayOrder,
       req.user.userId,
       createRazorpayOrderRequest,
     );

@@ -83,4 +83,21 @@ export class StationLimitedResponse extends ResponseBase {
   @IsDecimal()
   @Expose()
   readonly longitude: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly pricePerHalfLitre: number;
+  
+  @IsDecimal()
+  @Expose()
+  readonly CO2saved: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly bottlesSaved: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly plasticSaved: number;
+
 }

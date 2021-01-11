@@ -110,4 +110,9 @@ export class UpdateStationRequest {
   @IsDecimal()
   @IsOptional()
   readonly longitude?: number;
+
+  @IsDecimal()
+  @IsOptional()
+  readonly pricePerHalfLitre: number;
+  
 }

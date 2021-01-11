@@ -87,4 +87,7 @@ export class CreateStationRequest {
 
   @IsNumber()
   readonly longitude: number;
+
+  @IsNumber()
+  readonly pricePerHalfLitre: number;
 }

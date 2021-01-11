@@ -102,6 +102,18 @@ export class Station {
   @Column({ type: 'decimal' })
   longitude: number;
 
+  @Column({ type: 'float', default: 0 })
+  CO2saved: number;
+
+  @Column({ type: 'float', default: 0 })
+  bottlesSaved: number;
+
+  @Column({ type: 'float', default: 0 })
+  plasticSaved: number;
+
+  @Column({ type: 'float', default: 0 })
+  pricePerHalfLitre: number;
+
   @Column()
   lastUpdatedBy: string;
 
