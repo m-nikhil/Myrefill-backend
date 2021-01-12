@@ -15,6 +15,7 @@ import { UserService } from '../user/user.service';
 import { User } from 'src/entities/user.entity';
 import { StationService } from '../station/station.service';
 import { Station } from 'src/entities/station.entity';
+import { Mutable } from 'src/common/type/mutable';
 
 /**
  * Transaction Service
@@ -166,5 +167,21 @@ export class TransactionService extends CRUDService<
       plasticSaved: user.plasticSaved,
       coupons: coupon.points
     };
+  }
+
+  getTransactions = async (
+    queryRunner: QueryRunner,
+    transactionReq: Mutable<TransactionListOption>
+  ): Promise<Transaction> => {
+    let qmgr=await queryRunner.manager
+      .createQueryBuilder()
+      .select("*")
+      .from(Transaction, 't')
+      .limit(transactionReq.limit)
+      .offset(transactionReq.limit*transactionReq.page)
+      .orderBy(transactionReq.orderCol,transactionReq.order!=='DESC'?'ASC':'DESC')
+
+    // console.log(qmgr.getSql());
+    return qmgr.execute();
   }
 }

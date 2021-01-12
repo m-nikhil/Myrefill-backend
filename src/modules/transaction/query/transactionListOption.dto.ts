@@ -1,9 +1,14 @@
-import { IsUUID, IsOptional, IsEnum } from 'class-validator';
+import { IsUUID, IsOptional, IsEnum, IsString } from 'class-validator';
 
 enum Status {
   unrecognized,
   success,
   failure,
+}
+
+enum order {
+  ASC,
+  DESC
 }
 
 export class TransactionListOption {
@@ -18,4 +23,18 @@ export class TransactionListOption {
   @IsUUID()
   @IsOptional()
   readonly userId?: string;
+
+  @IsOptional()
+  readonly limit: number = 10;
+
+  @IsOptional()
+  readonly page: number = 0;
+
+  @IsString()
+  @IsOptional()
+  readonly orderCol: string = `"createdAt"`;
+
+  @IsEnum(order)
+  @IsOptional()
+  readonly order: string = "DESC";
 }

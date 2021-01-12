@@ -101,7 +101,7 @@ export class TransactionController {
     return TransactionResponse.fromEntityList(
       await atomic(
         this.connection,
-        this.tansactionService.query,
+        this.tansactionService.getTransactions,
         transactionListOptionMutable,
       ),
     );
