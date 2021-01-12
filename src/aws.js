@@ -10,18 +10,21 @@ const ses = new SES({
   region: "ap-south-1",
   apiVersion: "2010-12-01"
 });
-exports.ses = ses;
+// exports.ses = ses;
+export const ses=ses;
 
 aws.config.update({
   signatureVersion: "v2",
   accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY
 });
-exports.S3 = S3;
+// exports.S3 = S3;
+export const S3=S3;
 
 const sns= new aws.SNS({
   apiVersion: '2010-03-31',
   region: "ap-south-1",
 });
 
-exports.SNS=sns;
+// exports.SNS=sns;
+export const SNS=sns;

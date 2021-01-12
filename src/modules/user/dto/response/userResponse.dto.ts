@@ -22,4 +22,16 @@ export class UserResponse extends ResponseBase {
 
   @Expose()
   razorpayCustomerId: string;
+
+  @Expose()
+  readonly cityId: string;
+
+  @Expose()
+  readonly stateId: string;
+
+  @Expose()
+  readonly city_name: string;
+  
+  @Expose()
+  readonly state_name: string;
 }

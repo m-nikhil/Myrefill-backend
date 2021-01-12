@@ -104,6 +104,18 @@ export class UserController {
   }
 
   /**
+   * get current user
+   */
+  @Get('me')
+  @JWT()
+  @Roles('admin','user')
+  async findCurrentUser(@Request() req): Promise<UserResponse> {
+    return UserResponse.fromEntity(
+      await atomic(this.connection, this.userService.getUserDetails, req.user.userId),
+    );
+  }
+
+  /**
    * get a user by id
    */
   @Get(':id')
@@ -111,7 +123,7 @@ export class UserController {
   @Roles('admin','user')
   async find(@Param() params: IdParam): Promise<UserResponse> {
     return UserResponse.fromEntity(
-      await atomic(this.connection, this.userService.getById, params.id),
+      await atomic(this.connection, this.userService.getUserDetails, params.id)
     );
   }
 

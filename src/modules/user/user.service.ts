@@ -8,7 +8,7 @@ import { RazorpayService } from '../thirdparty/razorpay.service';
 import { Coupon } from 'src/entities/coupon.entity';
 import {resetPasswordTemplate} from './../../email-templates/resetPasswordTemplate';
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
-import * as AWS from 'src/aws';
+import * as AWS from './../../aws';
 const otplib=require('otplib');
 @Injectable()
 export class UserService extends CRUDService<User> {
@@ -79,6 +79,21 @@ export class UserService extends CRUDService<User> {
   ): Promise<User> => {
     return queryRunner.manager.findOne(User, { email: email });
   };
+
+  getUserDetails= async (
+    queryRunner: QueryRunner,
+    id: string
+  ): Promise<User> => {
+    let user=await queryRunner.manager
+      .createQueryBuilder()
+      .select('"user".*')
+      .from(User,'user')
+      .leftJoinAndSelect(`city`,"city",`city.id="user"."cityId"`)
+      .leftJoinAndSelect(`state`,"state",`state.id="user"."stateId"`)
+      .where(`"user".id='${id}'`)
+      .execute()
+    return user[0];
+  }
 
   sendResetPasswordOTP = async (
     queryRunner: QueryRunner,
