@@ -3,7 +3,7 @@ import {
   Password,
   Email,
 } from 'src/common/decorators/combined.decorator';
-import { IsMobilePhone, IsUUID } from 'class-validator';
+import { IsMobilePhone, IsOptional, IsUUID } from 'class-validator';
 import { Match } from 'src/common/decorators/match.decorator';
 
 /**
@@ -28,9 +28,11 @@ export class CreateUserRequest {
   readonly confirmPassword: string;
 
   @IsUUID()
+  @IsOptional()
   readonly stateId: string;
 
   @IsUUID()
+  @IsOptional()
   readonly cityId: string;
 }
 

@@ -26,8 +26,10 @@ export class UpdateUserRequest {
   readonly auth_password: string;
 
   @IsUUID()
+  @IsOptional()
   readonly stateId: string;
 
   @IsUUID()
+  @IsOptional()
   readonly cityId: string;
 }

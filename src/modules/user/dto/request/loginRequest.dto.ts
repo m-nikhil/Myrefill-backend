@@ -1,4 +1,4 @@
-import { Password, Email } from 'src/common/decorators/combined.decorator';
+import { Password, Email, Text } from 'src/common/decorators/combined.decorator';
 
 /**
  * login request
@@ -7,6 +7,6 @@ export class LoginRequest {
   @Email()
   readonly auth_email: string;
 
-  @Password()
+  @Text()
   readonly auth_password: string;
 }
