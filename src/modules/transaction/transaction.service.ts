@@ -162,9 +162,9 @@ export class TransactionService extends CRUDService<
     return {
       user: user.fullname,
       userId: user.id,
-      Co2Saved: user.CO2saved,
-      bottleSaved: user.bottlesSaved,
-      plasticSaved: user.plasticSaved,
+      Co2Saved: user.CO2saved.toFixed(2),
+      bottleSaved: user.bottlesSaved.toFixed(2),
+      plasticSaved: user.plasticSaved.toFixed(2),
       coupons: coupon.points
     };
   }
