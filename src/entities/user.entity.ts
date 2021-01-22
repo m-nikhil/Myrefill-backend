@@ -45,14 +45,14 @@ export class User {
   @Column({ type: 'float', default: 0 })
   plasticSaved: number;
 
-  @Column()
+  @Column({nullable: true})
   stateId: string;
 
   @ManyToOne(() => State)
   @JoinColumn({ name: 'stateId' })
   state: State;
 
-  @Column()
+  @Column({nullable: true})
   cityId: string;
 
   @ManyToOne(()=>City)

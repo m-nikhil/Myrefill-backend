@@ -60,7 +60,7 @@ export class UserController {
    */
   @Get()
   @JWT()
-  @Roles('admin')
+  @Roles('admin','user')
   async query(): Promise<UserResponse[]> {
     return UserResponse.fromEntityList(
       await atomic(this.connection, this.userService.query),
@@ -73,7 +73,7 @@ export class UserController {
   @Put(':id')
   @JWT()
   @Roles('admin', 'user')
-  @UseGuards(AuthGuard('local'))
+  // @UseGuards(AuthGuard('local'))
   async update(
     @Request() req,
     @Param() params: IdParam,
