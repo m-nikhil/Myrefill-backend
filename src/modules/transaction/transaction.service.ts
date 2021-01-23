@@ -178,9 +178,9 @@ export class TransactionService extends CRUDService<
       .select("*")
       .from(Transaction, 't')
       .limit(transactionReq.limit)
+      .where({userId: transactionReq.userId})
       .offset(transactionReq.limit*transactionReq.page)
       .orderBy(transactionReq.orderCol,transactionReq.order!=='DESC'?'ASC':'DESC')
-
     // console.log(qmgr.getSql());
     return qmgr.execute();
   }
