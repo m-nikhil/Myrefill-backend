@@ -90,4 +90,7 @@ export class CreateStationRequest {
 
   @IsNumber()
   readonly pricePerHalfLitre: number;
+
+  @Text()
+  readonly awsToken: string;
 }

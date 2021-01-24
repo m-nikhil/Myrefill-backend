@@ -151,4 +151,8 @@ export class StationResponse extends ResponseBase {
     }
   })
   readonly distanceInKms: string;
+
+  @Text()
+  @Expose()
+  readonly awsToken: string;
 }

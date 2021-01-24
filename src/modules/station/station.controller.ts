@@ -25,7 +25,7 @@ import { StationLimitedResponse } from './dto/response/stationResponseLimited.dt
 import { StationListOption } from './dto/query/stationListOption.dto';
 import { stationLocationParams } from './dto/request/stationLocationParams.dto';
 import { StationOfferResponse } from './dto/response/stationOfferResponse.dto';
-import { StationCouponRequest } from '../coupon/dto/request/createStationCouponRequest.dto';
+import { StationCouponRequest } from './dto/request/createStationCouponRequest.dto';
 
 @Controller('station')
 @ApiTags('station')

@@ -114,5 +114,9 @@ export class UpdateStationRequest {
   @IsDecimal()
   @IsOptional()
   readonly pricePerHalfLitre: number;
+
+  @Text()
+  @IsOptional()
+  readonly awsToken: string;
   
 }

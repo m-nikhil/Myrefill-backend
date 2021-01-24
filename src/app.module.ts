@@ -7,6 +7,7 @@ import { StationModule } from './modules/station/station.module';
 import { TransactionModule } from './modules/transaction/transaction.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { CouponModule } from './modules/coupon/coupon.module';
+import { AwsModule } from './aws/aws.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CouponModule } from './modules/coupon/coupon.module';
     TransactionModule,
     FormsModule,
     CouponModule,
+    AwsModule,
   ],
 })
 export class AppModule {}

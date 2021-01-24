@@ -114,6 +114,9 @@ export class Station {
   @Column({ type: 'float', default: 0 })
   pricePerHalfLitre: number;
 
+  @Column({ nullable: true, unique: true })
+  awsToken: string;
+
   @Column()
   lastUpdatedBy: string;
 

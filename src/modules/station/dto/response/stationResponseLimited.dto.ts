@@ -100,4 +100,7 @@ export class StationLimitedResponse extends ResponseBase {
   @Expose()
   readonly plasticSaved: number;
 
+  @Text()
+  @Expose()
+  readonly awsToken: string;
 }

@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsUUID } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsUUID } from 'class-validator';
 import { Text } from 'src/common/decorators/combined.decorator';
 import { Entity } from 'typeorm';
 
@@ -21,4 +21,5 @@ export class StationCouponRequest {
 
   @IsBoolean()
   isActive: boolean;
+
 }
