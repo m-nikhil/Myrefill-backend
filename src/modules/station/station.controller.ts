@@ -24,6 +24,8 @@ import { UpdateStationRequest } from './dto/request/updateStationRequest.dto';
 import { StationLimitedResponse } from './dto/response/stationResponseLimited.dto';
 import { StationListOption } from './dto/query/stationListOption.dto';
 import { stationLocationParams } from './dto/request/stationLocationParams.dto';
+import { StationOfferResponse } from './dto/response/stationOfferResponse.dto';
+import { StationCouponRequest } from '../coupon/dto/request/createStationCouponRequest.dto';
 
 @Controller('station')
 @ApiTags('station')
@@ -102,6 +104,44 @@ export class StationController {
         this.connection,
         this.stationService.queryAll,
         stationListOption,
+      ),
+    );
+  }
+
+  /**
+   * query all station offers
+   */
+  @Get('coupons')
+  @JWT()
+  @Roles('admin','user')
+  async queryOffers(
+    @Query('searchKey') searchKey: string
+  ): Promise<StationOfferResponse[]> {
+    return StationOfferResponse.fromEntityList(
+      await atomic(
+        this.connection,
+        this.stationService.getOffers,
+        searchKey
+      ),
+    );
+  }
+
+  /**
+   * create a new offer
+   */
+  @Post('coupon')
+  @JWT()
+  @Roles('admin','user')
+  async createOffer(
+    @Request() req,
+    @Body() createCouponRequest: StationCouponRequest,
+  ): Promise<StationOfferResponse> {
+    return StationOfferResponse.fromEntity(
+      await atomic(
+        this.connection,
+        this.stationService.createOffer,
+        req.user.userId,
+        createCouponRequest,
       ),
     );
   }

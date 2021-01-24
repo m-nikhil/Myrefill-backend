@@ -7,6 +7,8 @@ import { Builder } from 'builder-pattern';
 import { CreateStationMetricRequest } from './dto/request/createStationMetricRequest.dto';
 import { StationListOption } from './dto/query/stationListOption.dto';
 import { StationResponse } from './dto/response/stationResponse.dto';
+import { StationOfferResponse } from './dto/response/stationOfferResponse.dto';
+import { StationCoupon } from 'src/entities/stationCoupon.entity';
 
 /**
  * Arrow func can't be called with super. Use this.
@@ -73,5 +75,43 @@ export class StationService extends CRUDService<Station, StationListOption> {
 
     // console.log(nearbyStationsQry);
     return await queryRunner.manager.query(nearbyStationsQry);
+  }
+
+  getOffers = async (
+    queryRunner: QueryRunner,
+    searchKey
+  ): Promise<StationOfferResponse>=>{
+    let qmgr=await queryRunner.manager
+      .createQueryBuilder()
+      .select('offer.*')
+      .from(StationCoupon,'offer')
+      .leftJoinAndSelect(`station`,"s",`s.id=offer."stationId"`)
+      .where(`offer."isActive"='true' and lower(s.name) like '%${String(searchKey).toLowerCase()}%'`)
+    // console.log(qmgr.getSql());
+    return qmgr.execute();
+  }
+  
+  createOffer = async (
+    queryRunner: QueryRunner,
+    userId: string,
+    createCouponRequest: Partial<StationOfferResponse>
+  ): Promise<StationCoupon>=>{
+    console.log('creating offer');
+    console.log(createCouponRequest);
+
+    const entity = Builder((createCouponRequest as unknown) as StationCoupon)
+      .lastUpdatedBy(userId)
+      .build();
+
+    const generatedResult = (
+      await queryRunner.manager.insert(StationCoupon, entity)
+    ).generatedMaps[0];
+    const entityInserted = Builder(entity)
+      .id(generatedResult.id)
+      .createdAt(generatedResult.createdAt)
+      .updatedAt(generatedResult.updatedAt)
+      .build();
+
+    return entityInserted as StationCoupon;
   }
 }
