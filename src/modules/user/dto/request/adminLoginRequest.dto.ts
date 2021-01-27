@@ -1,9 +1,9 @@
-import { Password } from 'src/common/decorators/combined.decorator';
+import { Text } from 'src/common/decorators/combined.decorator';
 
 /**
  * admin login request
  */
 export class AdminLoginRequest {
-  @Password()
+  @Text()
   readonly password: string;
 }
