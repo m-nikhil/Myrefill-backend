@@ -9,7 +9,7 @@ import { StationListOption } from './dto/query/stationListOption.dto';
 import { StationResponse } from './dto/response/stationResponse.dto';
 import { StationOfferResponse } from './dto/response/stationOfferResponse.dto';
 import { StationCoupon } from 'src/entities/stationCoupon.entity';
-
+import * as moment from 'moment';
 /**
  * Arrow func can't be called with super. Use this.
  * Ref: https://stackoverflow.com/questions/57561473/how-to-invoke-arrow-functions-on-a-superclass-with-super-in-subclass
@@ -63,6 +63,65 @@ export class StationService extends CRUDService<Station, StationListOption> {
     return await this.superDelete(queryRunner, userId, id);
   };
 
+  findStationStatus = async (
+    station: Station
+  ) => {
+    let dayWise={};
+    if(!station.timings || station.timings.length<0){
+      return;
+    }
+    let timings=JSON.parse(JSON.stringify(station.timings));
+    for(let timing of timings){
+      dayWise[timing.name]=timing;
+    }
+    let nextOpeningDay=moment(new Date());
+    let statusFound=false;
+    if(!dayWise[nextOpeningDay.format('dddd')]){
+      return;
+    }
+    if(dayWise[nextOpeningDay.format('dddd')].isChecked){
+      let todayData=dayWise[nextOpeningDay.format('dddd')].hrs;
+      for(let hour of todayData){
+        let openingHour=`${moment().format("YYYY-MM-DD")}T${hour.from.hr}:${hour.from.min}`;
+        let closingHour=`${moment().format("YYYY-MM-DD")}T${hour.to.hr}:${hour.to.min}`;
+        let timediff=moment.duration(moment().diff(openingHour)).asMinutes();
+        if(timediff<=0){
+          station['status'] = `Closed. Opens at ${hour.from.hr}:${hour.from.min}`;
+          statusFound=true;
+          break;
+        }else if(moment().isBetween(openingHour,closingHour)){
+          station['status'] = `Open. Closes at ${hour.to.hr}:${hour.to.min}`;
+          statusFound=true;
+          break;
+        }
+      }
+    }
+    if(!statusFound){
+      do{
+        nextOpeningDay=nextOpeningDay.add(1,'day');
+      }while(
+        !dayWise[nextOpeningDay.format('dddd')] ||
+        !dayWise[nextOpeningDay.format('dddd')].isChecked
+      )
+      let nextOpeningData=dayWise[nextOpeningDay.format('dddd')].hrs;
+      station['status'] = `Closed. Opens at ${nextOpeningDay.format('dddd')} ${nextOpeningData[0].from.hr}:${nextOpeningData[0].from.min}`
+    }
+
+    return station;
+  }
+
+  superQuery = this.query;
+  queryStationDetails = async (
+    queryRunner: QueryRunner,
+    stationListOption: StationListOption
+  ):Promise<Station[]> => {
+    let stations=await this.superQuery(queryRunner, stationListOption);
+    for(let station of stations){
+      station=await this.findStationStatus(station);
+    }
+    return stations;
+  }
+
   getNearByStations= async (
     queryRunner: QueryRunner,
     data
@@ -113,5 +172,14 @@ export class StationService extends CRUDService<Station, StationListOption> {
       .build();
 
     return entityInserted as StationCoupon;
+  }
+
+  getStationById = async (
+    queryRunner: QueryRunner,
+    id: string,
+  ) => {
+    let station=await this.getById(queryRunner,id);
+    station=await this.findStationStatus(station);
+    return station;
   }
 }

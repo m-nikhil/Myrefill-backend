@@ -75,7 +75,7 @@ export class StationController {
       return StationResponse.fromEntityList(
         await atomic(
           this.connection,
-          this.stationService.query,
+          this.stationService.queryStationDetails,
           stationListOption,
         ),
       );
@@ -84,7 +84,7 @@ export class StationController {
     return StationLimitedResponse.fromEntityList(
       await atomic(
         this.connection,
-        this.stationService.query,
+        this.stationService.queryStationDetails,
         stationListOption,
       ),
     );
@@ -159,12 +159,12 @@ export class StationController {
   ): Promise<StationResponse | StationLimitedResponse> {
     if (req.user.roles.includes('admin')) {
       return StationResponse.fromEntity(
-        await atomic(this.connection, this.stationService.getById, params.id),
+        await atomic(this.connection, this.stationService.getStationById, params.id),
       );
     }
 
     return StationLimitedResponse.fromEntity(
-      await atomic(this.connection, this.stationService.getById, params.id),
+      await atomic(this.connection, this.stationService.getStationById, params.id),
     );
   }
 
