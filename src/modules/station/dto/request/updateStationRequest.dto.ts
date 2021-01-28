@@ -121,6 +121,26 @@ export class UpdateStationRequest {
   @IsOptional()
   readonly pricePerHalfLitre: number;
 
+  @IsDecimal()
+  @IsOptional()
+  readonly pricePerLitre: number;
+
+  @IsDecimal()
+  @IsOptional()
+  readonly cafeSharePerLitre: number;
+
+  @IsDecimal()
+  @IsOptional()
+  readonly ourSharePerLitre: number;
+
+  @IsDecimal()
+  @IsOptional()
+  readonly cafeSharePerHalfLitre: number;
+
+  @IsDecimal()
+  @IsOptional()
+  readonly ourSharePerHalfLitre: number;
+
   @Text()
   @IsOptional()
   readonly awsToken: string;

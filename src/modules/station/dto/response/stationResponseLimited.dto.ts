@@ -91,6 +91,26 @@ export class StationLimitedResponse extends ResponseBase {
   @IsDecimal()
   @Expose()
   readonly pricePerHalfLitre: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly pricePerLitre: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly cafeSharePerLitre: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly ourSharePerLitre: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly cafeSharePerHalfLitre: number;
+
+  @IsDecimal()
+  @Expose()
+  readonly ourSharePerHalfLitre: number;
   
   @IsDecimal()
   @Expose()

@@ -9,6 +9,7 @@ import {
   IsNumber,
   IsBoolean,
   IsJSON,
+  IsDecimal,
 } from 'class-validator';
 
 export class CreateStationRequest {
@@ -92,8 +93,24 @@ export class CreateStationRequest {
   @IsNumber()
   readonly longitude: number;
 
-  @IsNumber()
+  @IsDecimal()
   readonly pricePerHalfLitre: number;
+
+  @IsDecimal()
+  readonly pricePerLitre: number;
+
+  @IsDecimal()
+  readonly cafeSharePerLitre: number;
+
+  @IsDecimal()
+  readonly ourSharePerLitre: number;
+
+  @IsDecimal()
+  readonly cafeSharePerHalfLitre: number;
+
+  @IsDecimal()
+  readonly ourSharePerHalfLitre: number;
+
 
   @Text()
   @IsOptional()

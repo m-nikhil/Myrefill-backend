@@ -115,6 +115,21 @@ export class Station {
   plasticSaved: number;
 
   @Column({ type: 'float', default: 0 })
+  pricePerLitre: number;
+
+  @Column({ type: 'float', default: 0 })
+  cafeSharePerLitre: number;
+
+  @Column({ type: 'float', default: 0 })
+  ourSharePerLitre: number;
+
+  @Column({ type: 'float', default: 0 })
+  cafeSharePerHalfLitre: number;
+
+  @Column({ type: 'float', default: 0 })
+  ourSharePerHalfLitre: number;
+
+  @Column({ type: 'float', default: 0 })
   pricePerHalfLitre: number;
 
   @Column({ nullable: true, unique: true })
