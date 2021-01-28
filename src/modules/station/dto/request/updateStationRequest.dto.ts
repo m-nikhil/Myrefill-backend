@@ -8,6 +8,8 @@ import {
   IsOptional,
   IsUUID,
   IsBooleanString,
+  IsJSON,
+  IsBoolean,
 } from 'class-validator';
 
 export class UpdateStationRequest {
@@ -103,6 +105,10 @@ export class UpdateStationRequest {
   @IsOptional()
   readonly sundayTiming?: string;
 
+  @IsJSON()
+  @IsOptional()
+  readonly timings?: string;
+
   @IsDecimal()
   @IsOptional()
   readonly latitude?: number;
@@ -118,5 +124,9 @@ export class UpdateStationRequest {
   @Text()
   @IsOptional()
   readonly awsToken: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly isActive: boolean;
   
 }

@@ -8,6 +8,7 @@ import {
   IsInt,
   IsOptional,
   IsUUID,
+  IsJSON,
 } from 'class-validator';
 import { Expose, Transform } from 'class-transformer';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
@@ -115,6 +116,10 @@ export class StationResponse extends ResponseBase {
   @Expose()
   readonly sundayTiming: string;
 
+  @IsJSON()
+  @Expose()
+  readonly timings: string;
+
   @IsDecimal()
   @Expose()
   readonly latitude: number;
@@ -154,5 +159,13 @@ export class StationResponse extends ResponseBase {
 
   @Text()
   @Expose()
+  readonly status: string;
+
+  @Text()
+  @Expose()
   readonly awsToken: string;
+
+  @IsBoolean()
+  @Expose()
+  readonly isActive: boolean;
 }

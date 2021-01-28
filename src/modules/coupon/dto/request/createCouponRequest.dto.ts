@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateCouponRequest {
   @IsUUID()
@@ -10,4 +10,8 @@ export class CreateCouponRequest {
   @IsUUID()
   @IsOptional()
   readonly stationId: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly isActive: boolean;
 }

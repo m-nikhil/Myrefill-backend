@@ -1,4 +1,4 @@
-import { IsUUID, IsOptional, IsBooleanString } from 'class-validator';
+import { IsUUID, IsOptional, IsBooleanString, IsBoolean } from 'class-validator';
 
 export class StationListOption {
   @IsBooleanString()
@@ -12,4 +12,8 @@ export class StationListOption {
   @IsUUID()
   @IsOptional()
   readonly cityId?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  readonly isActive?: string;
 }

@@ -1,5 +1,5 @@
 import { Word, Text } from 'src/common/decorators/combined.decorator';
-import { IsDecimal, IsBoolean, IsInt, IsUUID } from 'class-validator';
+import { IsDecimal, IsBoolean, IsInt, IsUUID, IsJSON } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 
@@ -76,6 +76,10 @@ export class StationLimitedResponse extends ResponseBase {
   @Expose()
   readonly sundayTiming: string;
 
+  @IsJSON()
+  @Expose()
+  readonly timings: string;
+
   @IsDecimal()
   @Expose()
   readonly latitude: number;
@@ -103,4 +107,8 @@ export class StationLimitedResponse extends ResponseBase {
   @Text()
   @Expose()
   readonly awsToken: string;
+
+  @IsBoolean()
+  @Expose()
+  readonly isActive: boolean;
 }

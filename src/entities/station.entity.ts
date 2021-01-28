@@ -96,6 +96,9 @@ export class Station {
   @Column()
   sundayTiming: string;
 
+  @Column({type: 'json',nullable: true})
+  timings: string;
+
   @Column({ type: 'decimal' })
   latitude: number;
 
@@ -116,6 +119,9 @@ export class Station {
 
   @Column({ nullable: true, unique: true })
   awsToken: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 
   @Column()
   lastUpdatedBy: string;

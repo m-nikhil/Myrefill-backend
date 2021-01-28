@@ -185,4 +185,20 @@ export class TransactionService extends CRUDService<
     console.log(qmgr.getSql());
     return qmgr.execute();
   }
+
+  // CRUDgetById=this.getById;
+  getById = async (
+    queryRunner: QueryRunner,
+    id
+  ):Promise<Transaction> => {
+    let qmgr=await queryRunner.manager
+      .createQueryBuilder()
+      .select("t.*")
+      .from(Transaction, 't')
+      .leftJoinAndSelect(`station`,`station`,`station.id=t."stationId"`)
+      .where({id: id});
+    console.log(qmgr.getSql());
+    let rs=await qmgr.execute();
+    return rs[0];
+  }
 }

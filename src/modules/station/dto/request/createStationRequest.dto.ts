@@ -8,6 +8,7 @@ import {
   IsUUID,
   IsNumber,
   IsBoolean,
+  IsJSON,
 } from 'class-validator';
 
 export class CreateStationRequest {
@@ -82,6 +83,9 @@ export class CreateStationRequest {
   @Text()
   readonly sundayTiming: string;
 
+  @IsJSON()
+  readonly timings: JSON
+
   @IsNumber()
   readonly latitude: number;
 
@@ -92,5 +96,9 @@ export class CreateStationRequest {
   readonly pricePerHalfLitre: number;
 
   @Text()
+  @IsOptional()
   readonly awsToken: string;
+
+  @IsBoolean()
+  readonly isActive: boolean;
 }

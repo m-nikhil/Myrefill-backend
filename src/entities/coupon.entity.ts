@@ -28,6 +28,9 @@ user: User;
 @Column()
 points: number;
 
+@Column({ default: true })
+isActive: boolean;
+
 @Column()
 lastUpdatedBy: string;
 

@@ -1,4 +1,4 @@
-import { IsNumber, IsUUID } from 'class-validator';
+import { IsBoolean, IsNumber, IsUUID } from 'class-validator';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 import { Expose } from 'class-transformer';
 
@@ -14,4 +14,8 @@ export class CouponResponse extends ResponseBase {
   @IsNumber()
   @Expose()
   readonly points: number;
+
+  @IsBoolean()
+  @Expose()
+  readonly isActive: boolean;
 }
