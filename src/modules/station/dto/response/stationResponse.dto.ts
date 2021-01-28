@@ -154,14 +154,29 @@ export class StationResponse extends ResponseBase {
   
   @IsDecimal()
   @Expose()
+  @Transform((val)=>{
+    if(val){
+      return val.toFixed(2)
+    }
+  })
   readonly CO2saved: number;
 
   @IsDecimal()
   @Expose()
+  @Transform((val)=>{
+    if(val){
+      return val.toFixed(2)
+    }
+  })
   readonly bottlesSaved: number;
 
   @IsDecimal()
   @Expose()
+  @Transform((val)=>{
+    if(val){
+      return val.toFixed(2)
+    }
+  })
   readonly plasticSaved: number;
 
   @Text()

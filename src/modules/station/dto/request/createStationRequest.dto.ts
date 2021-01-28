@@ -64,24 +64,31 @@ export class CreateStationRequest {
   readonly typeOfWater: string;
 
   @Text()
+  @IsOptional()
   readonly mondayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly tuesdayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly wednesdayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly thursdayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly fridayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly saturdayTiming: string;
 
   @Text()
+  @IsOptional()
   readonly sundayTiming: string;
 
   @IsJSON()
@@ -110,7 +117,6 @@ export class CreateStationRequest {
 
   @IsDecimal()
   readonly ourSharePerHalfLitre: number;
-
 
   @Text()
   @IsOptional()

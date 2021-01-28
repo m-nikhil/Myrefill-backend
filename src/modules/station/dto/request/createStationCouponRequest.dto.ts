@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import { IsBoolean, IsDecimal, IsUUID } from 'class-validator';
 import { Text } from 'src/common/decorators/combined.decorator';
 import { Entity } from 'typeorm';
 
@@ -16,7 +16,7 @@ export class StationCouponRequest {
   @Text()
   terms: string;
 
-  @IsNumber()
+  @IsDecimal()
   couponPoints: number;
 
   @IsBoolean()

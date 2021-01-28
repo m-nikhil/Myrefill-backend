@@ -140,12 +140,16 @@ export class StationService extends CRUDService<Station, StationListOption> {
     queryRunner: QueryRunner,
     searchKey
   ): Promise<StationOfferResponse>=>{
+    let searchCond="";
+    if(searchKey){
+      searchCond=` and lower(s.name) like '%${String(searchKey).toLowerCase()}%'`;
+    }
     let qmgr=await queryRunner.manager
       .createQueryBuilder()
       .select('offer.*')
       .from(StationCoupon,'offer')
       .leftJoinAndSelect(`station`,"s",`s.id=offer."stationId"`)
-      .where(`offer."isActive"='true' and lower(s.name) like '%${String(searchKey).toLowerCase()}%'`)
+      .where(`offer."isActive"='true' ${searchCond}`)
     // console.log(qmgr.getSql());
     return qmgr.execute();
   }
