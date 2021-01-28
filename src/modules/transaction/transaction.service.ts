@@ -175,9 +175,10 @@ export class TransactionService extends CRUDService<
   ): Promise<Transaction> => {
     let qmgr=await queryRunner.manager
       .createQueryBuilder()
-      .select("*")
+      .select("t.*")
       .from(Transaction, 't')
       .limit(transactionReq.limit)
+      .leftJoinAndSelect(`station`,`s`,`s.id=t."stationId"`)
       .where({userId: transactionReq.userId})
       .offset(transactionReq.limit*transactionReq.page)
       .orderBy(transactionReq.orderCol,transactionReq.order!=='DESC'?'ASC':'DESC')

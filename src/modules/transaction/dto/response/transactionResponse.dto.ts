@@ -1,4 +1,4 @@
-import { IsUUID, IsInt, IsNumber, IsEnum, IsDate } from 'class-validator';
+import { IsUUID, IsInt, IsNumber, IsEnum, IsDate, IsString } from 'class-validator';
 import { Expose } from 'class-transformer';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 
@@ -45,4 +45,9 @@ export class TransactionResponse extends ResponseBase {
   @IsDate()
   @Expose()
   readonly createdAt: Date;
+
+  @IsString()
+  @Expose()
+  readonly station_name: string;
+
 }
