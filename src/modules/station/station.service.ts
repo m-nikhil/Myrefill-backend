@@ -68,7 +68,7 @@ export class StationService extends CRUDService<Station, StationListOption> {
   ) => {
     let dayWise={};
     if(!station.timings || station.timings.length<0){
-      return;
+      return station;
     }
     let timings=JSON.parse(JSON.stringify(station.timings));
     for(let timing of timings){
@@ -77,7 +77,7 @@ export class StationService extends CRUDService<Station, StationListOption> {
     let nextOpeningDay=moment(new Date());
     let statusFound=false;
     if(!dayWise[nextOpeningDay.format('dddd')]){
-      return;
+      return station;
     }
     if(dayWise[nextOpeningDay.format('dddd')].isChecked){
       let todayData=dayWise[nextOpeningDay.format('dddd')].hrs;
