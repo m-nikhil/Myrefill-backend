@@ -10,6 +10,8 @@ import { StationResponse } from './dto/response/stationResponse.dto';
 import { StationOfferResponse } from './dto/response/stationOfferResponse.dto';
 import { StationCoupon } from 'src/entities/stationCoupon.entity';
 import * as moment from 'moment';
+import { StationCouponUpdateRequest } from './dto/request/updateStationCouponRequest.dto';
+import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 /**
  * Arrow func can't be called with super. Use this.
  * Ref: https://stackoverflow.com/questions/57561473/how-to-invoke-arrow-functions-on-a-superclass-with-super-in-subclass
@@ -185,5 +187,31 @@ export class StationService extends CRUDService<Station, StationListOption> {
     let station=await this.getById(queryRunner,id);
     station=await this.findStationStatus(station);
     return station;
+  }
+
+  getStationCouponById = async (
+    queryRunner: QueryRunner,
+    id: string,
+  ) => {
+    return await queryRunner.manager.findOne(StationCoupon,{id: id});
+  }
+
+  updateOffer = async (
+    queryRunner: QueryRunner,
+    userId,
+    updateCouponRequest: StationCouponUpdateRequest
+  ) => {
+    let result=await queryRunner.manager.update(StationCoupon,{id: updateCouponRequest.id},{
+      stationId: updateCouponRequest.stationId,
+      couponCode: updateCouponRequest.couponCode,
+      image: updateCouponRequest.image,
+      terms: updateCouponRequest.terms,
+      couponPoints: updateCouponRequest.couponPoints,
+      isActive: updateCouponRequest.isActive
+    });
+    if(!(result.affected>0)){
+      throw new EntityNotFoundError(StationCoupon, updateCouponRequest.id);
+    }
+    return queryRunner.manager.findOneOrFail(StationCoupon, updateCouponRequest.id);
   }
 }

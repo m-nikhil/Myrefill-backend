@@ -1,4 +1,4 @@
-import { IsUUID, IsInt, IsString, IsBoolean } from 'class-validator';
+import { IsUUID, IsString, IsBoolean, IsDecimal } from 'class-validator';
 import { ResponseBase } from 'src/common/dto/responseBase.dto';
 import { Expose } from 'class-transformer';
 
@@ -7,7 +7,7 @@ export class StationOfferResponse extends ResponseBase {
   @Expose()
   readonly id: string;
 
-  @IsInt()
+  @IsDecimal()
   @Expose()
   readonly couponPoints: number;
 
