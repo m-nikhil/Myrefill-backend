@@ -47,12 +47,12 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
 
   redeemCoupon = async (
     queryRunner: QueryRunner,
-    updatedBy: string,
+    userId: string,
     createCouponRequestDto: CreateCouponRequest,
   ):Promise<Coupon> => {
 
     let history=await queryRunner.manager.findOne(RedeemHistory,{
-      userId: createCouponRequestDto.userId,
+      userId: userId,
       couponId: createCouponRequestDto.couponId,
       redeemDate: moment().format("YYYY-MM-DD")
     });
@@ -71,7 +71,7 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
-    let record=await queryRunner.manager.findOne(Coupon, { userId: createCouponRequestDto.userId });
+    let record=await queryRunner.manager.findOne(Coupon, { userId: userId });
     if(record.points<createCouponRequestDto.points){
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -102,16 +102,16 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
     // }
     if(record){
       await queryRunner.manager.insert(RedeemHistory,{
-        userId: createCouponRequestDto.userId,
+        userId: userId,
         // stationId: createCouponRequestDto.stationId,
         couponId: createCouponRequestDto.couponId,
         redeemPoints: createCouponRequestDto.points,
         redeemDate: moment().format("YYYY-MM-DD"),
-        lastUpdatedBy: updatedBy
+        lastUpdatedBy: userId
       });
       return await this.superUpdate(
         queryRunner,
-        updatedBy,
+        userId,
         record.id,
         Builder<Partial<Coupon>>()
           .points(record.points-createCouponRequestDto.points)

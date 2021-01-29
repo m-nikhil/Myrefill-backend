@@ -2,6 +2,7 @@ import { IsBoolean, IsNumber, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateCouponRequest {
   @IsUUID()
+  @IsOptional()
   readonly userId: string;
 
   @IsNumber()
