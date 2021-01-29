@@ -60,14 +60,14 @@ export class CouponController {
   @JWT()
   async redeemCoupons(
     @Request() req,
-    @Body() createCouponRequest: CreateCouponRequest,
+    @Body('couponId') couponId: string,
   ): Promise<CouponResponse> {
     return CouponResponse.fromEntity(
       await atomic(
         this.connection,
         this.couponService.redeemCoupon,
         req.user.userId,
-        createCouponRequest,
+        couponId,
         ),
     );
   }

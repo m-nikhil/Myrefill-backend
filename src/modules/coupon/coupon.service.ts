@@ -48,12 +48,12 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
   redeemCoupon = async (
     queryRunner: QueryRunner,
     userId: string,
-    createCouponRequestDto: CreateCouponRequest,
+    couponId
   ):Promise<Coupon> => {
 
     let history=await queryRunner.manager.findOne(RedeemHistory,{
       userId: userId,
-      couponId: createCouponRequestDto.couponId,
+      couponId: couponId,
       redeemDate: moment().format("YYYY-MM-DD")
     });
     if(history){
@@ -63,16 +63,17 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    let stationCoupon=await queryRunner.manager.findOne(StationCoupon, {id: createCouponRequestDto.couponId})
-    if(stationCoupon.couponPoints!=createCouponRequestDto.points){
-      throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Redeem points must be equal to coupon point.',
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    // let stationCoupon=await queryRunner.manager.findOne(StationCoupon, {id: couponId})
+    // if(stationCoupon.couponPoints!=createCouponRequestDto.points){
+    //   throw new HttpException({
+    //     status: HttpStatus.INTERNAL_SERVER_ERROR,
+    //     message: 'Redeem points must be equal to coupon point.',
+    //   }, HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
     
     let record=await queryRunner.manager.findOne(Coupon, { userId: userId });
-    if(record.points<createCouponRequestDto.points){
+    let stationCoupon=await queryRunner.manager.findOne(StationCoupon, {id: couponId});
+    if(record.points<stationCoupon.couponPoints){
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'User Coupon Points are not enough to redeem.',
@@ -104,8 +105,8 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
       await queryRunner.manager.insert(RedeemHistory,{
         userId: userId,
         // stationId: createCouponRequestDto.stationId,
-        couponId: createCouponRequestDto.couponId,
-        redeemPoints: createCouponRequestDto.points,
+        couponId: couponId,
+        redeemPoints: stationCoupon.couponPoints,
         redeemDate: moment().format("YYYY-MM-DD"),
         lastUpdatedBy: userId
       });
@@ -114,7 +115,7 @@ export class CouponService extends CRUDService<Coupon, CouponListOption> {
         userId,
         record.id,
         Builder<Partial<Coupon>>()
-          .points(record.points-createCouponRequestDto.points)
+          .points(record.points-stationCoupon.couponPoints)
           .build()
       )
     }else{
