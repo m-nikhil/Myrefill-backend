@@ -22,14 +22,14 @@ let commonVars = {
 };
 exports.development = {
   NODE_ENV: 'development',
-  FRONTEND_URL: '',
+  FRONTEND_URL: 'https://myrefill.balajisankar.tech',
   DATABASE_HOST: 'localhost',
   S3_UPLOAD_DIR: 'dev',
   ...commonVars,
 };
 exports.production = {
   NODE_ENV: 'production',
-  FRONTEND_URL: '',
+  FRONTEND_URL: 'https://myrefill.balajisankar.tech',
   DATABASE_HOST: '139.59.35.136',
   S3_UPLOAD_DIR: 'prod',
   ...commonVars,

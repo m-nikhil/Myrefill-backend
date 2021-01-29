@@ -9,7 +9,11 @@ import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.enableCors();
+  app.enableCors({
+    origin:[
+      process.env.FRONTEND_URL
+    ]
+  });
   /**
    * Swagger configuations
    */
