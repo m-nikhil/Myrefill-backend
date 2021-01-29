@@ -176,6 +176,7 @@ export class UserController {
    * change user password
    */
   @Post('password/changePwd')
+  @JWT()
   async changeUserPassword(
     @Request() req,
     @Body()
