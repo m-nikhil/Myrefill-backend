@@ -33,7 +33,7 @@ export class UpdateStationRequest {
   @IsOptional()
   readonly pincode?: number;
 
-  @IsBooleanString()
+  @IsBoolean()
   @IsOptional()
   readonly open?: boolean;
 

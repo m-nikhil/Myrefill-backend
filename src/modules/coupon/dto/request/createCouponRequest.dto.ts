@@ -11,6 +11,9 @@ export class CreateCouponRequest {
   @IsOptional()
   readonly stationId: string;
 
+  @IsUUID()
+  readonly couponId: string;
+
   @IsBoolean()
   @IsOptional()
   readonly isActive: boolean;

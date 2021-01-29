@@ -10,6 +10,7 @@ import {
     ManyToOne,
 } from 'typeorm';
 import { Station } from './station.entity';
+import { StationCoupon } from './stationCoupon.entity';
 import { User } from './user.entity';
 
 /**
@@ -27,15 +28,25 @@ userId: string;
 @JoinColumn({ name: 'userId' })
 user: User;
 
-@Column({ type: 'uuid' })
+@Column({ type: 'uuid', nullable: true })
 stationId: string;
 
 @ManyToOne(() => Station)
 @JoinColumn({ name: 'stationId' })
 station: Station;
 
+@Column({ type: 'uuid' })
+couponId: string;
+
+@ManyToOne(() => StationCoupon)
+@JoinColumn({ name: 'couponId' })
+coupon: StationCoupon;
+
 @Column()
 redeemPoints: number;
+
+@Column({})
+redeemDate: Date;
 
 @Column()
 lastUpdatedBy: string;

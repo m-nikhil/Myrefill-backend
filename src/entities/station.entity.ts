@@ -75,25 +75,25 @@ export class Station {
   @Column()
   typeOfWater: string;
 
-  @Column()
+  @Column({ nullable: true })
   mondayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   tuesdayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   wednesdayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   thursdayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   fridayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   saturdayTiming: string;
 
-  @Column()
+  @Column({ nullable: true })
   sundayTiming: string;
 
   @Column({type: 'json',nullable: true})
