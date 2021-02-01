@@ -10,6 +10,7 @@ import {
   IsBooleanString,
   IsJSON,
   IsBoolean,
+  IsNumber,
 } from 'class-validator';
 
 export class UpdateStationRequest {
@@ -109,11 +110,11 @@ export class UpdateStationRequest {
   @IsOptional()
   readonly timings?: string;
 
-  @IsDecimal()
+  @IsNumber()
   @IsOptional()
   readonly latitude?: number;
 
-  @IsDecimal()
+  @IsNumber()
   @IsOptional()
   readonly longitude?: number;
 
