@@ -17,7 +17,7 @@ export class AuthService {
     password: string,
   ): Promise<User> {
     const user = await this.userService.getByEmail(transactionRunner, email);
-    if (user && user.password === password) {
+    if (user && await this.userService.decryptAndCompareString(password,user.password)) {
       return user;
     }
     return null;

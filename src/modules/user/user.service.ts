@@ -10,6 +10,7 @@ import {resetPasswordTemplate} from './../../email-templates/resetPasswordTempla
 import { EntityNotFoundError } from 'typeorm/error/EntityNotFoundError';
 import * as AWS from './../../aws';
 const otplib=require('otplib');
+const bcrypt=require("bcryptjs");
 @Injectable()
 export class UserService extends CRUDService<User> {
   Entity = User;
@@ -37,6 +38,7 @@ export class UserService extends CRUDService<User> {
       createUserRequestDto as CreateUserRequestInternal,
     )
       .razorpayCustomerId(razorpayCustomer.id)
+      .password(await this.encryptString(createUserRequestDto.password))
       .build();
 
     let createdUser=await this.superCreate(
@@ -182,7 +184,7 @@ export class UserService extends CRUDService<User> {
       .createQueryBuilder()
       .update(User)
       .set({
-        password: data.newPassword,
+        password: await this.encryptString(data.newPassword),
         emailOTP: null,
         token: null
       })
@@ -195,6 +197,19 @@ export class UserService extends CRUDService<User> {
     }
     
     return true;
+  }
+
+  encryptString=async (password)=>{
+    if(password){
+      var salt=bcrypt.genSaltSync(10);
+      var hash=bcrypt.hashSync(password,salt);
+      return hash;
+    }
+    return "";
+  }
+  
+  decryptAndCompareString=async (password,hash)=>{
+      return bcrypt.compareSync(password,hash);
   }
 
   changePassword = async(
@@ -211,7 +226,7 @@ export class UserService extends CRUDService<User> {
       }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    if(user.password!==data.oldPassword){
+    if(!await this.decryptAndCompareString(data.oldPassword,user.password)){
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
         message: `Old password is incorrect.Enter valid one.`,
@@ -222,7 +237,7 @@ export class UserService extends CRUDService<User> {
       .createQueryBuilder()
       .update(User)
       .set({
-        password: data.newPassword,
+        password: await this.encryptString(data.newPassword),
       })
       .where('id = :id', { id: userId })
       .execute();
