@@ -1,5 +1,5 @@
 import { IsBoolean, IsDecimal, IsOptional, IsUUID } from 'class-validator';
-import { Text } from 'src/common/decorators/combined.decorator';
+import { AwsLink, Text } from 'src/common/decorators/combined.decorator';
 import { Entity } from 'typeorm';
 
 @Entity()
@@ -15,7 +15,7 @@ export class StationCouponUpdateRequest {
   @IsOptional()
   couponCode: string;
 
-  @Text()
+  @AwsLink()
   @IsOptional()
   image: string;
 

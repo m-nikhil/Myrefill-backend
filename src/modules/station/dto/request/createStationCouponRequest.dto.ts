@@ -1,5 +1,5 @@
 import { IsBoolean, IsDecimal, IsUUID } from 'class-validator';
-import { Text } from 'src/common/decorators/combined.decorator';
+import { AwsLink, Text } from 'src/common/decorators/combined.decorator';
 import { Entity } from 'typeorm';
 
 @Entity()
@@ -10,7 +10,7 @@ export class StationCouponRequest {
   @Text()
   couponCode: string;
 
-  @Text()
+  @AwsLink()
   image: string;
 
   @Text()

@@ -27,6 +27,10 @@ export function Text() {
   return applyDecorators(MaxLength(100));
 }
 
+export function AwsLink() {
+  return applyDecorators(MaxLength(1000));
+}
+
 /**
  * Combined decorator for password.
  */
