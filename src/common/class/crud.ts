@@ -151,7 +151,8 @@ export class CRUDService<
       listOption,
     ).execute();
     if (result.length == 0) {
-      throw new EntityNotFoundError(this.Entity, null);
+      // throw new EntityNotFoundError(this.Entity, null);
+      return [];
     }
     return result;
   };
@@ -167,7 +168,8 @@ export class CRUDService<
       .withDeleted()
       .execute();
     if (result.length == 0) {
-      throw new EntityNotFoundError(this.Entity, null);
+      // throw new EntityNotFoundError(this.Entity, null);
+      return [];
     }
     return result;
   };
