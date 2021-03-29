@@ -101,7 +101,7 @@ export class UserService extends CRUDService<User> {
     queryRunner: QueryRunner,
     emailId: string,
   ): Promise<Boolean> => {
-    let user=await queryRunner.manager.findOne(User, { email: emailId });
+    let user=await queryRunner.manager.findOne(User, { email: String(emailId).toLowerCase() });
     
     if(!user){
       throw new HttpException({
