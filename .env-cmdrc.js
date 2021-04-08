@@ -8,9 +8,6 @@ let commonVars = {
 
   ADMIN_PASS: 'Admin@123',
 
-  RAZORPAY_KEY: 'rzp_test_PnGX1hQCb6eAMl',
-  RAZORPAY_SECRET: 'PoyrmOYQFLBGHmo3Lt0UyiGG',
-
   AWS_SES_ACCESS_KEY_ID: 'AKIAJAT5ERHY2UMZS4LQ',
   AWS_SES_SECRET_ACCESS_KEY: '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',
   AWS_BUCKET_REGION: 'ap-south-1',
@@ -25,6 +22,8 @@ exports.development = {
   FRONTEND_URL: 'https://myrefill.balajisankar.tech',
   DATABASE_HOST: 'localhost',
   S3_UPLOAD_DIR: 'dev',
+  RAZORPAY_KEY: 'rzp_test_PnGX1hQCb6eAMl',
+  RAZORPAY_SECRET: 'PoyrmOYQFLBGHmo3Lt0UyiGG',
   ...commonVars,
 };
 exports.production = {
@@ -32,6 +31,8 @@ exports.production = {
   FRONTEND_URL: 'https://myrefill.balajisankar.tech',
   DATABASE_HOST: '139.59.35.136',
   S3_UPLOAD_DIR: 'prod',
+  RAZORPAY_KEY: 'rzp_live_Q8RFc3tTOQTAEA',
+  RAZORPAY_SECRET: 'cd93lho6f3TaNScHuCPgL9IC',
   ...commonVars,
 };
 exports.local = {
@@ -39,5 +40,7 @@ exports.local = {
   FRONTEND_URL: 'http://localhost:3000',
   DATABASE_HOST: 'localhost',
   S3_UPLOAD_DIR: 'local',
+  RAZORPAY_KEY: 'rzp_test_PnGX1hQCb6eAMl',
+  RAZORPAY_SECRET: 'PoyrmOYQFLBGHmo3Lt0UyiGG',
   ...commonVars,
 };

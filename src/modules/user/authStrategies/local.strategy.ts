@@ -5,6 +5,8 @@ import {
   UnauthorizedException,
   BadRequestException,
   ValidationError,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 import { Connection } from 'typeorm';
@@ -41,7 +43,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       loginRequest.auth_password,
     );
     if (!user) {
-      throw new UnauthorizedException();
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: `Invalid USER`,
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return user;
   }
